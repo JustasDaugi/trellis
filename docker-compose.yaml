@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: ./server/Dockerfile
     environment:
-      DATABASE_URL: postgres://justas:justas@localhost:5432/trello
+      DATABASE_URL: postgres://justas:justas@postgres:5432/trello
       PORT: 3000
     ports:
       - "3000"
