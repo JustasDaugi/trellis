@@ -10,7 +10,6 @@ const router = createRouter({
       path: '/dashboard',
       component: MainLayout,
       beforeEnter: [authenticate],
-      // Removed the 'write-article' child route
     },
     {
       path: '/login',
