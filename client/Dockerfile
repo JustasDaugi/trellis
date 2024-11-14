@@ -19,10 +19,15 @@ RUN rm /usr/share/nginx/html/* -rf
 
 COPY --from=builder /app/client/dist /usr/share/nginx/html
 
-ENV NGINX_ENVSUBST_OUTPUT_DIR '/etc/nginx/conf.d'
+ENV NGINX_ENVSUBST_OUTPUT_DIR /etc/nginx/conf.d
 
 COPY client/nginx/default.conf.template /etc/nginx/templates/default.conf.template
-
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
+
+# Need to pass in an argument
+
+# docker build -t app/client -f ./client/Dockerfile .
+# docker run -d --name client -p 3001:80 app/client
