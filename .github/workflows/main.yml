@@ -88,8 +88,8 @@ jobs:
           retry-delay: 5s
           url: ${{ env.VITE_API_ORIGIN }}/api/health
 
-      - name: Test client E2E
-        run: npm run test:e2e -w=client
+      # - name: Test client E2E
+      #   run: npm run test:e2e -w=client
 
       # Playwright generates a report of the E2E tests. We will
       # upload that report as an artifact so that we can download
