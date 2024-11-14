@@ -27,7 +27,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 
-# Need to pass in an argument
+# Argument is an environment variable
 
 # docker build -t app/client -f ./client/Dockerfile .
 # docker run -d --name client -p 3001:80 app/client
