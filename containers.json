@@ -1,24 +1,23 @@
 {
-  "client": {
-    "image": ":trellis.client-a3b4513e59754dbed63a266531c356bbd84602e2.13",
-    "command": [],
-    "ports": {
-      "80": "HTTP"
+    "client": {
+      "image": ":trellis.client-1.20",
+      "command": [],
+      "ports": {
+        "80": "HTTP"
+      },
+      "environment": {
+        "API_PROXY_PASS": "http://localhost:3000"
+      }
     },
-    "environment": {
-      "API_PROXY_PASS": "http://localhost:3000"
-    }
-  },
-  "server": {
-    "image": ":trellis.server-a3b4513e59754dbed63a266531c356bbd84602e2.12",
-    "ports": {
-      "3000": "HTTP"
-    },
-    "environment": {
-      "NODE_ENV": "production",
-      "PORT": "3000",
-      "DATABASE_URL": "***",
-      "TOKEN_KEY": ""
+    "server": {
+      "image": ":trellis.server-1.22",
+      "ports": {
+        "3000": "HTTP"
+      },
+      "environment": {
+        "NODE_ENV": "production",
+        "DATABASE_URL": "postgres://postgres:1234@localhost:5432/trello",
+        "TOKEN_KEY": "{{ A LONG STRING OF RANDOM ALPHANUMERIC CHARACTERS }}"
+      }
     }
   }
-}
