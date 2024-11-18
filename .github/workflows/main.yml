@@ -11,15 +11,15 @@ jobs:
       VITE_API_PATH: /api/v1/trpc
 
       # variables for our back-end tests, see server/src/config.ts
-      DATABASE_URL: postgres://justas:justas@localhost:5432/trello
+      DATABASE_URL: postgres://postgres:1234@localhost:5432/trello
     services:
       # spin up a database for tests
       postgres:
         image: postgres:16.1-alpine
         env:
           # Postgres will create a database with the following credentials
-          POSTGRES_USER: justas
-          POSTGRES_PASSWORD: justas
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 1234
           POSTGRES_DB: trello
         ports:
           - 5432:5432
