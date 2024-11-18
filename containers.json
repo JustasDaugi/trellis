@@ -17,7 +17,7 @@
     "environment": {
       "NODE_ENV": "production",
       "PORT": "3000",
-      "DATABASE_URL": "***\\n",
+      "DATABASE_URL": "",
       "TOKEN_KEY": ""
     }
   }
