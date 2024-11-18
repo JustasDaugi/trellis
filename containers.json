@@ -16,7 +16,7 @@
       },
       "environment": {
         "NODE_ENV": "production",
-        "DATABASE_URL": "postgres://postgres:1234@localhost:5432/trello",
+        "DATABASE_URL": "postgres://justas:justas@localhost:5432/trello",
         "TOKEN_KEY": "{{ A LONG STRING OF RANDOM ALPHANUMERIC CHARACTERS }}"
       }
     }
