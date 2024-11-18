@@ -1,6 +1,6 @@
 {
     "client": {
-      "image": ":trellis.client-1.20",
+      "image": "trellis.client-1.20",
       "command": [],
       "ports": {
         "80": "HTTP"
@@ -10,7 +10,7 @@
       }
     },
     "server": {
-      "image": ":trellis.server-1.22",
+      "image": "trellis.server-1.22",
       "ports": {
         "3000": "HTTP"
       },
