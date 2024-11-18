@@ -16,6 +16,7 @@ export default function createApp(db: Database) {
   app.use(cors())
   app.use(express.json())
 
+  // TODO: Add loging here to inform the server is running without issues
   app.use('/api/health', (_, res) => {
     res.status(200).send('OK')
   })
