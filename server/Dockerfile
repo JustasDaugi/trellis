@@ -9,7 +9,7 @@ RUN npm ci
 
 # Copy over the server source code
 # NOTE: The added ./ before server allowed to build the image sucessfully.
-COPY server/ server/
+COPY server/ ./server/
 
 # Build the server
 WORKDIR /app/server
