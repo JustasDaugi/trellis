@@ -10,7 +10,7 @@
       }
     },
     "server": {
-      "image": ":trellis.server-1.22",
+      "image": "",
       "ports": {
         "3000": "HTTP"
       },
