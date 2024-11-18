@@ -208,8 +208,8 @@ jobs:
           }' > public-endpoint.json
 
       - name: Deploy to AWS Lightsail
-          run: |
-            aws lightsail create-container-service-deployment \
-            --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} \
-            --containers file://containers.json \
-            --public-endpoint file://public-endpoint.json
+        run: |
+          aws lightsail create-container-service-deployment \
+          --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} \
+          --containers file://containers.json \
+          --public-endpoint file://public-endpoint.json
