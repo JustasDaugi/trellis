@@ -17,7 +17,7 @@
       "environment": {
         "NODE_ENV": "production",
         "DATABASE_URL": "postgresql://trello_owner:k4J8wCjzlLfm@ep-misty-scene-a25gsp63.eu-central-1.aws.neon.tech/trello?sslmode=require",
-        "TOKEN_KEY": "{{ A LONG STRING OF RANDOM ALPHANUMERIC CHARACTERS }}"
+        "TOKEN_KEY": "supersecretkey"
       }
     }
   }
