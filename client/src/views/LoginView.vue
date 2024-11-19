@@ -16,9 +16,6 @@ const userForm = ref({
 const [submitLogin, errorMessage] = useErrorMessage(async () => {
   await login(userForm.value)
 
-  // Support redirects back to the page the user was on before logging in
-  // if it is provided in the query string:
-  // :to="/login?redirect=/some-page-to-go/after-login"
   const redirectTo = (router.currentRoute.value.query.redirect as string) ?? {
     name: 'WriteArticle',
   }
