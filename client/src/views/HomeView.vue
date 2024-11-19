@@ -15,7 +15,7 @@ import { isLoggedIn } from '@/stores/user'
 
         <div class="mb-40 mt-6 flex flex-col items-center gap-2">
           <FwbButton
-            class="w-80 text-center"
+            class="w-72 text-center"
             component="RouterLink"
             tag="router-link"
             href="/signup"
@@ -24,7 +24,7 @@ import { isLoggedIn } from '@/stores/user'
             Sign Up
           </FwbButton>
           <FwbButton
-            class="w-80 text-center"
+            class="w-72 text-center"
             component="RouterLink"
             tag="router-link"
             color="alternative"
