@@ -11,8 +11,6 @@ const links = computed(() => [
   ...(isLoggedIn.value
     ? []
     : [
-        { label: 'Login', name: 'Login' },
-        { label: 'Signup', name: 'Signup' },
       ]),
 ])
 
