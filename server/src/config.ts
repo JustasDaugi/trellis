@@ -27,7 +27,6 @@ const schema = z
 
         throw new Error('You must provide a TOKEN_KEY in a production env!')
       }),
-      // expiresIn: z.string().default('7d'),
       expiresIn: z.string().default('7d'),
       passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),
     }),
@@ -56,7 +55,6 @@ const config = schema.parse({
 
 export default config
 
-// utility functions
 function coerceBoolean(value: unknown) {
   if (typeof value === 'string') {
     return value === 'true' || value === '1'

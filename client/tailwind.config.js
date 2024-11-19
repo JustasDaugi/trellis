@@ -17,6 +17,7 @@ export default {
     fontFamily: {
       body: ['"Inter var"', '"Inter"', '"Open Sans"', 'Helvetica', 'Arial', 'sans-serif'],
       mono: ['"Fira Code"', 'monospace'],
+      poppins: ['Poppins', 'sans-serif'],
     },
   },
 }
