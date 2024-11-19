@@ -23,14 +23,14 @@ import { isLoggedIn } from '@/stores/user'
         <div class="mt-8 lg:mt-0 lg:w-1/2">
           <div class="flex items-center justify-center lg:justify-end">
             <div class="max-w-lg">
-              <picture>
+              <!-- <picture>
                 <source srcset="../assets/illustration.webp" type="image/webp" />
                 <img
                   class="h-64 w-full rounded-md object-cover object-center"
                   src="../assets/illustration.png"
                   alt="Community illustration"
                 />
-              </picture>
+              </picture> -->
             </div>
           </div>
         </div>
