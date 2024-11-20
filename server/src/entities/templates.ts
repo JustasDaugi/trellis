@@ -10,7 +10,11 @@ import { idSchema } from './shared'
 export const boardTemplateSchema = z.object({
   id: idSchema,
   title: z.string().min(1).max(500),
-  description: z.string().nullable(),
+  imageId: z.string().nullable(),
+  imageThumbUrl: z.string().nullable(),
+  imageFullUrl: z.string().nullable(),
+  imageUserName: z.string().nullable(),
+  imageLinkHtml: z.string().nullable(),
   createdAt: z.date().default(() => new Date()),
   updatedAt: z.date().default(() => new Date()),
 })
@@ -30,7 +34,9 @@ export const listTemplateSchema = z.object({
   id: idSchema,
   title: z.string().min(1).max(500),
   order: z.number().nullable(),
-  boardTemplateId: idSchema,
+  boardId: idSchema,
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z.date().default(() => new Date()),
 })
 
 export const listTemplateKeysAll = Object.keys(
@@ -45,11 +51,13 @@ export type ListTemplatePublic = Pick<
 >
 
 export const cardTemplateSchema = z.object({
+  createdAt: z.date().default(() => new Date()),
+  description: z.string().min(1).max(1000),
   id: idSchema,
-  title: z.string().min(1).max(500),
-  description: z.string().nullable(),
+  listId: idSchema,
   order: z.number().nullable(),
-  listTemplateId: idSchema,
+  title: z.string().min(1).max(500),
+  updatedAt: z.date().default(() => new Date()),
 })
 
 export const cardTemplateKeysAll = Object.keys(
