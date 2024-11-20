@@ -1,14 +1,8 @@
 import type { Database } from '@server/database'
-import { boardKeysPublic } from '@server/entities/board'
 import type {
   BoardTemplatePublic,
   ListTemplatePublic,
   CardTemplatePublic,
-} from '@server/entities/templates'
-import {
-  boardTemplateKeysPublic,
-  listTemplateKeysPublic,
-  cardTemplateKeysPublic,
 } from '@server/entities/templates'
 import { sql } from 'kysely'
 
@@ -19,7 +13,36 @@ export function templateRepository(db: Database) {
     ): Promise<BoardTemplatePublic | undefined> {
       return db
         .selectFrom('boardTemplate')
-        .select(boardTemplateKeysPublic)
+        .select([
+          'id',
+          'title',
+          'createdAt',
+          'updatedAt',
+          'imageFullUrl',
+          'imageId',
+          'imageLinkHtml',
+          'imageThumbUrl',
+          'imageUserName',
+        ])
+        .where('id', '=', id)
+        .executeTakeFirst()
+    },
+
+    async findBoard(id: number): Promise<BoardTemplatePublic | undefined> {
+      return db
+        .selectFrom('board')
+        .select([
+          'id',
+          'title',
+          'createdAt',
+          'updatedAt',
+          'imageFullUrl',
+          'imageId',
+          'imageLinkHtml',
+          'imageThumbUrl',
+          'imageUserName',
+          'userId',
+        ])
         .where('id', '=', id)
         .executeTakeFirst()
     },
@@ -29,7 +52,7 @@ export function templateRepository(db: Database) {
     ): Promise<ListTemplatePublic[]> {
       return db
         .selectFrom('listTemplate')
-        .select(listTemplateKeysPublic)
+        .select(['id', 'title', 'order', 'boardId', 'createdAt', 'updatedAt'])
         .where('boardId', '=', boardTemplateId)
         .orderBy('order')
         .execute()
@@ -40,18 +63,43 @@ export function templateRepository(db: Database) {
     ): Promise<CardTemplatePublic[]> {
       return db
         .selectFrom('cardTemplate')
-        .select(cardTemplateKeysPublic)
+        .select([
+          'id',
+          'title',
+          'description',
+          'order',
+          'listId',
+          'createdAt',
+          'updatedAt',
+        ])
         .where('listId', '=', listTemplateId)
         .orderBy('order')
         .execute()
     },
+
     async copyBoard(boardTemplateId: number, userId: number) {
       return db
         .insertInto('board')
-        .columns(boardKeysPublic)
+        .columns([
+          'title',
+          'imageFullUrl',
+          'imageId',
+          'imageLinkHtml',
+          'imageThumbUrl',
+          'imageUserName',
+          'userId',
+        ])
         .expression(
-          db.selectFrom('boardTemplate')
-            .select(boardTemplateKeysPublic)
+          db
+            .selectFrom('boardTemplate')
+            .select([
+              'title',
+              'imageFullUrl',
+              'imageId',
+              'imageLinkHtml',
+              'imageThumbUrl',
+              'imageUserName',
+            ])
             .select(sql`${userId}`.as('userId'))
             .where('id', '=', boardTemplateId)
         )
@@ -64,7 +112,8 @@ export function templateRepository(db: Database) {
         .insertInto('list')
         .columns(['title', 'order', 'boardId', 'userId'])
         .expression(
-          db.selectFrom('listTemplate')
+          db
+            .selectFrom('listTemplate')
             .select(['title', 'order'])
             .select(sql`${boardId}`.as('boardId'))
             .select(sql`${userId}`.as('userId'))
@@ -79,8 +128,10 @@ export function templateRepository(db: Database) {
         .insertInto('card')
         .columns(['title', 'order', 'description', 'listId', 'userId'])
         .expression(
-          db.selectFrom('cardTemplate')
-            .select(['title', 'order', 'description'])
+          db
+            .selectFrom('cardTemplate')
+            .select(['title', 'order'])
+            .select(sql`NULL`.as('description'))
             .select(sql`${listId}`.as('listId'))
             .select(sql`${userId}`.as('userId'))
             .where('id', '=', cardTemplateId)
