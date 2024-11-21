@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface BoardForm {
+  title: string
+  selectedBackground: string
+}
+
+const isDialogOpen = ref(false)
+const boardForm = ref<BoardForm>({
+  title: '',
+  selectedBackground: '',
+})
+
+function openDialog() {
+  isDialogOpen.value = true
+}
+
+function selectBackground(background: string) {
+  boardForm.value.selectedBackground = background
+}
+
+function createBoard() {
+  console.log('Board created with title:', boardForm.value.title)
+  console.log('Selected background:', boardForm.value.selectedBackground)
+  isDialogOpen.value = false
+}
+</script>
+
 <template>
   <div>
     <button
@@ -87,7 +116,9 @@
           </div>
         </div>
 
-        <label for="board-title" class="mb-2 block text-sm font-medium text-gray-700">Board title</label>
+        <label for="board-title" class="mb-2 block text-sm font-medium text-gray-700"
+          >Board title</label
+        >
         <input
           id="board-title"
           v-model="boardForm.title"
@@ -104,32 +135,5 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      isDialogOpen: false,
-      boardForm: {
-        title: '',
-        selectedBackground: '',
-      },
-    }
-  },
-  methods: {
-    openDialog() {
-      this.isDialogOpen = true
-    },
-    selectBackground(background) {
-      this.boardForm.selectedBackground = background
-    },
-    createBoard() {
-      console.log('Board created with title:', this.boardForm.title)
-      console.log('Selected background:', this.boardForm.selectedBackground)
-      this.isDialogOpen = false
-    },
-  },
-}
-</script>
 
 <style scoped></style>
