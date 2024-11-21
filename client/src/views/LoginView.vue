@@ -17,7 +17,7 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
   await login(userForm.value)
 
   const redirectTo = (router.currentRoute.value.query.redirect as string) ?? {
-    name: 'WriteArticle',
+    name: 'MainView',
   }
 
   router.push(redirectTo)
