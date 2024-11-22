@@ -9,28 +9,28 @@ export async function up(db: Kysely<any>) {
     .addColumn('title', 'text', (c) => c.notNull())
     .addColumn('order', 'integer')
     .addColumn('description', 'text')
-    .addColumn('listId', 'integer', (c) =>
+    .addColumn('list_id', 'integer', (c) =>
       c.references('list.id').onDelete('cascade').notNull()
     )
-    .addColumn('userId', 'integer', (c) =>
+    .addColumn('user_id', 'integer', (c) =>
       c.references('user.id').onDelete('cascade').notNull()
     )
-    .addColumn('createdAt', 'timestamptz', (c) =>
+    .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
-    .addColumn('updatedAt', 'timestamptz', (c) =>
+    .addColumn('updated_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute()
 
   await db.schema
-    .createIndex('idx_card_listId')
+    .createIndex('idx_card_list_id')
     .on('card')
-    .column('listId')
+    .column('list_id')
     .execute()
 }
 
 export async function down(db: Kysely<any>) {
-  await db.schema.dropIndex('idx_card_listId').on('card').execute()
+  await db.schema.dropIndex('idx_card_list_id').on('card').execute()
   await db.schema.dropTable('card').execute()
 }
