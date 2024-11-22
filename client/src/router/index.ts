@@ -21,6 +21,11 @@ const router = createRouter({
       component: () => import('../views/SignupView.vue'),
     },
     {
+      path: '/board/:id',
+      name: 'Board',
+      component: () => import('../views/BoardView.vue'),
+    },
+    {
       path: '/',
       name: 'Home',
       component: HomeView,
@@ -36,7 +41,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    if (to.name === 'MainView' || to.path.startsWith('/dashboard')) {
+    if (to.name === 'MainView' || to.path.startsWith('/dashboard') || to.name === 'Board') {
       next({ name: 'Home' })
     } else {
       next()
