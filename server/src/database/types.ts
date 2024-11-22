@@ -10,11 +10,7 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>
 export interface Board {
   createdAt: Generated<Timestamp>
   id: Generated<number>
-  imageFullUrl: string | null
-  imageId: string | null
-  imageLinkHtml: string | null
-  imageThumbUrl: string | null
-  imageUserName: string | null
+  selectedBackground: string | null
   title: string
   updatedAt: Generated<Timestamp>
   userId: number
@@ -23,11 +19,7 @@ export interface Board {
 export interface BoardTemplate {
   createdAt: Generated<Timestamp>
   id: Generated<number>
-  imageFullUrl: string | null
-  imageId: string | null
-  imageLinkHtml: string | null
-  imageThumbUrl: string | null
-  imageUserName: string | null
+  selectedBackground: string | null
   title: string
   updatedAt: Generated<Timestamp>
 }
