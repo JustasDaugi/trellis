@@ -18,11 +18,7 @@ export function templateRepository(db: Database) {
           'title',
           'createdAt',
           'updatedAt',
-          'imageFullUrl',
-          'imageId',
-          'imageLinkHtml',
-          'imageThumbUrl',
-          'imageUserName',
+          'selectedBackground'
         ])
         .where('id', '=', id)
         .executeTakeFirst()
@@ -36,12 +32,7 @@ export function templateRepository(db: Database) {
           'title',
           'createdAt',
           'updatedAt',
-          'imageFullUrl',
-          'imageId',
-          'imageLinkHtml',
-          'imageThumbUrl',
-          'imageUserName',
-          'userId',
+          'selectedBackground'
         ])
         .where('id', '=', id)
         .executeTakeFirst()
@@ -82,11 +73,6 @@ export function templateRepository(db: Database) {
         .insertInto('board')
         .columns([
           'title',
-          'imageFullUrl',
-          'imageId',
-          'imageLinkHtml',
-          'imageThumbUrl',
-          'imageUserName',
           'userId',
         ])
         .expression(
@@ -94,11 +80,6 @@ export function templateRepository(db: Database) {
             .selectFrom('boardTemplate')
             .select([
               'title',
-              'imageFullUrl',
-              'imageId',
-              'imageLinkHtml',
-              'imageThumbUrl',
-              'imageUserName',
             ])
             .select(sql`${userId}`.as('userId'))
             .where('id', '=', boardTemplateId)
