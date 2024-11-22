@@ -39,11 +39,7 @@ export const fakeAuthUser = <T extends Partial<AuthUser>>(
 export const fakeBoard = <T extends Partial<Insertable<Board>>>(overrides: T) =>
   ({
     title: random.string(),
-    imageId: null,
-    imageThumbUrl: null,
-    imageFullUrl: null,
-    imageUserName: null,
-    imageLinkHtml: null,
+    selectedBackground: random.string(),
     userId: randomId(),
     createdAt: new Date(),
     updatedAt: new Date(),
