@@ -66,7 +66,7 @@ function handleSelect(background: string) {
         </svg>
       </div> -->
       
-      <!-- <div class="relative">
+      <div class="relative">
         <img
           src="@/assets/background-3.jpg"
           alt="Background 3"
@@ -88,7 +88,7 @@ function handleSelect(background: string) {
             clip-rule="evenodd"
           />
         </svg>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
