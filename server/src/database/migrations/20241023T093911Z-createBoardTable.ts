@@ -7,18 +7,14 @@ export async function up(db: Kysely<any>) {
       c.primaryKey().generatedAlwaysAsIdentity()
     )
     .addColumn('title', 'text', (c) => c.notNull())
-    .addColumn('imageId', 'text')
-    .addColumn('imageThumbUrl', 'text')
-    .addColumn('imageFullUrl', 'text')
-    .addColumn('imageUserName', 'text')
-    .addColumn('imageLinkHTML', 'text')
-    .addColumn('createdAt', 'timestamptz', (c) =>
+    .addColumn('selected_background', 'text')
+    .addColumn('created_at', 'timestamptz', (c) =>
       c.notNull().defaultTo(sql`now()`)
     )
-    .addColumn('updatedAt', 'timestamptz', (c) =>
+    .addColumn('updated_at', 'timestamptz', (c) =>
       c.notNull().defaultTo(sql`now()`)
     )
-    .addColumn('userId', 'integer', (c) =>
+    .addColumn('user_id', 'integer', (c) =>
       c.notNull().references('user.id').onDelete('cascade')
     )
     .execute()
