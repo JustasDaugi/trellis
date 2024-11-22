@@ -7,8 +7,8 @@ export const boardSchema = z.object({
   id: idSchema,
   title: z.string().min(1).max(500),
   selectedBackground: z.string().nullable(),
-  createdAt: z.date().default(() => new Date()),
-  updatedAt: z.date().default(() => new Date()),
+  createdAt: z.number().default(() => Date.now()),
+  updatedAt: z.number().default(() => Date.now()),
   userId: idSchema,
 })
 
