@@ -7,7 +7,7 @@ export async function up(db: Kysely<any>) {
       c.primaryKey().generatedAlwaysAsIdentity()
     )
     .addColumn('title', 'text', (c) => c.notNull())
-    .addColumn('selectedBackground', 'text')
+    .addColumn('selected_background', 'text')
     .addColumn('created_at', 'timestamptz', (c) =>
       c.notNull().defaultTo(sql`now()`)
     )
