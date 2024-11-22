@@ -5,13 +5,9 @@ export async function up(db: Kysely<any>): Promise<void> {
     .insertInto('board_template')
     .values({
       title: 'Agile Board',
-      imageId: '',
-      imageThumbUrl: '',
-      imageFullUrl: '',
-      imageUserName: '',
-      imageLinkHTML: '',
+      selectedBackground: '',
       createdAt: sql`CURRENT_TIMESTAMP`,
-      updatedAt: sql`CURRENT_TIMESTAMP`
+      updatedAt: sql`CURRENT_TIMESTAMP`,
     })
     .returning('id')
     .execute()
@@ -24,14 +20,14 @@ export async function up(db: Kysely<any>): Promise<void> {
         order: 1,
         boardId: boardTemplate.id,
         createdAt: sql`CURRENT_TIMESTAMP`,
-        updatedAt: sql`CURRENT_TIMESTAMP`
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       },
       {
         title: 'In Progress',
         order: 2,
         boardId: boardTemplate.id,
         createdAt: sql`CURRENT_TIMESTAMP`,
-        updatedAt: sql`CURRENT_TIMESTAMP`
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       },
     ])
     .returning(['id'])
@@ -46,7 +42,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         order: 1,
         listId: doneList.id,
         createdAt: sql`CURRENT_TIMESTAMP`,
-        updatedAt: sql`CURRENT_TIMESTAMP`
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       },
       {
         title: 'Going Live with server deployment',
@@ -54,7 +50,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         order: 2,
         listId: doneList.id,
         createdAt: sql`CURRENT_TIMESTAMP`,
-        updatedAt: sql`CURRENT_TIMESTAMP`
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       },
       {
         title: 'Android App new landing page',
@@ -62,7 +58,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         order: 1,
         listId: inProgressList.id,
         createdAt: sql`CURRENT_TIMESTAMP`,
-        updatedAt: sql`CURRENT_TIMESTAMP`
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       },
       {
         title: 'Analytics',
@@ -70,7 +66,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         order: 2,
         listId: inProgressList.id,
         createdAt: sql`CURRENT_TIMESTAMP`,
-        updatedAt: sql`CURRENT_TIMESTAMP`
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       },
     ])
     .execute()
