@@ -17,11 +17,12 @@ export default authenticatedProcedure
 
   .mutation(
     async ({
-      input: board,
+      input: { title, selectedBackground },
       ctx: { authUser, repos },
     }): Promise<BoardPublic> => {
       const newBoard = {
-        ...board,
+        title,
+        selectedBackground: selectedBackground || null,
         userId: authUser.id,
       }
 
