@@ -7,15 +7,11 @@ export async function up(db: Kysely<any>) {
       c.primaryKey().generatedAlwaysAsIdentity().notNull()
     )
     .addColumn('title', 'text', (c) => c.notNull())
-    .addColumn('imageId', 'text')
-    .addColumn('imageThumbUrl', 'text')
-    .addColumn('imageFullUrl', 'text')
-    .addColumn('imageUserName', 'text')
-    .addColumn('imageLinkHTML', 'text')
-    .addColumn('createdAt', 'timestamptz', (c) =>
+    .addColumn('selected_background', 'text')
+    .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
-    .addColumn('updatedAt', 'timestamptz', (c) =>
+    .addColumn('updated_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute()
@@ -27,16 +23,17 @@ export async function up(db: Kysely<any>) {
     )
     .addColumn('title', 'text', (c) => c.notNull())
     .addColumn('order', 'integer')
-    .addColumn('boardId', 'integer', (c) =>
+    .addColumn('board_id', 'integer', (c) =>
       c.references('board_template.id').onDelete('cascade').notNull()
     )
-    .addColumn('createdAt', 'timestamptz', (c) =>
+    .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
-    .addColumn('updatedAt', 'timestamptz', (c) =>
+    .addColumn('updated_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute()
+
 
   await db.schema
     .createTable('card_template')
@@ -46,31 +43,33 @@ export async function up(db: Kysely<any>) {
     .addColumn('title', 'text', (c) => c.notNull())
     .addColumn('order', 'integer')
     .addColumn('description', 'text')
-    .addColumn('listId', 'integer', (c) =>
+    .addColumn('list_id', 'integer', (c) =>
       c.references('list_template.id').onDelete('cascade').notNull()
     )
-    .addColumn('createdAt', 'timestamptz', (c) =>
+    .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
-    .addColumn('updatedAt', 'timestamptz', (c) =>
+    .addColumn('updated_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute()
 
   await db.schema
-    .createIndex('idx_list_template_boardId')
+    .createIndex('idx_list_template_board_id')
     .on('list_template')
-    .column('boardId')
+    .column('board_id')
     .execute()
 
   await db.schema
-    .createIndex('idx_card_template_listId')
+    .createIndex('idx_card_template_list_id')
     .on('card_template')
-    .column('listId')
+    .column('list_id')
     .execute()
 }
 
 export async function down(db: Kysely<any>) {
+  await db.schema.dropIndex('idx_card_template_list_id').on('card_template').execute()
+  await db.schema.dropIndex('idx_list_template_board_id').on('list_template').execute()
   await db.schema.dropTable('card_template').execute()
   await db.schema.dropTable('list_template').execute()
   await db.schema.dropTable('board_template').execute()
