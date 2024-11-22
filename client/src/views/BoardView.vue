@@ -4,13 +4,14 @@ import { ref, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddListButton from '../components/BoardView/AddListButton.vue'
 import ThreeVerticalDots from '../components/BoardView/ThreeVerticalDots.vue'
-import type { Board, List } from '@server/shared/types'
+import type { Board } from '@server/shared/types'
 import { useBackgroundImage } from '@/utils/fetchImage'
+import type { ListPublic } from '@server/shared/types'
 
 const route = useRoute()
 const router = useRouter()
 const board = ref<Board | null>(null)
-const lists = ref<List[]>([])
+const lists = ref<ListPublic[]>([])
 
 const boardId = Number(route.params.id)
 
@@ -37,7 +38,7 @@ const fetchLists = async () => {
   }
 }
 
-const renderList = (newList: List) => {
+const renderList = (newList: ListPublic) => {
   lists.value.push(newList)
 }
 
