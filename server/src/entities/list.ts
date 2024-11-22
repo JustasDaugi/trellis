@@ -8,8 +8,8 @@ export const listSchema = z.object({
   title: z.string().min(1).max(500),
   order: z.number().nullable(),
   boardId: idSchema,
-  createdAt: z.date().default(() => new Date()),
-  updatedAt: z.date().default(() => new Date()),
+  createdAt: z.number().default(() => Date.now()),
+  updatedAt: z.number().default(() => Date.now()),
   userId: idSchema
 })
 
