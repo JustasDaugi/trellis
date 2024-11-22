@@ -1,11 +1,15 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Sidebar from '../components/Sidebar.vue'
-import CreateBoard from '../components/CreateBoard.vue'
+import CreateBoard from '../components/MainView/CreateBoard.vue'
 import SearchBoards from '../components/SearchBoards.vue'
+import BoardCard from '../components/MainView/BoardCard.vue'
 import { FwbButton } from 'flowbite-vue'
 import { isLoggedIn, logout } from '@/stores/user'
+import { trpc } from '@/trpc'
+import type { Selectable } from 'kysely'
+import type { Board } from '@server/shared/types'
 
 const isSidebarOpen = ref(false)
 const toggleSidebar = () => {
@@ -23,28 +27,55 @@ function logoutUser() {
 }
 
 const loggedIn = computed(() => isLoggedIn.value)
+
+const boards = ref<Selectable<Board>[]>([])
+
+const fetchBoards = async () => {
+  boards.value = await trpc.board.findAll.query()
+}
+
+onMounted(fetchBoards)
 </script>
 
 <template>
   <div class="relative min-h-screen" @click="closeSidebar">
     <header class="fixed left-0 top-0 z-50 w-full bg-gray-800 text-gray-300 shadow-md">
-      <div class="container mx-auto flex items-center justify-between px-4 py-3" @click.stop>
-        <FwbButton
-          size="sm"
-          variant="light"
-          @click.stop="toggleSidebar"
-          aria-label="Toggle sidebar"
-          class="bg-gray-700 p-2 hover:bg-gray-600 focus:ring-gray-500"
-        >
-          <span class="mb-1 block h-0.5 w-6 bg-gray-400"></span>
-          <span class="mb-1 block h-0.5 w-6 bg-gray-400"></span>
-          <span class="block h-0.5 w-6 bg-gray-400"></span>
-        </FwbButton>
-        <span class="text-lg font-medium">Boards</span>
+      <div class="flex w-full items-center justify-between px-4 py-3" @click.stop>
+        <div class="flex items-center space-x-2">
+          <FwbButton
+            size="sm"
+            variant="light"
+            @click.stop="toggleSidebar"
+            aria-label="Toggle sidebar"
+            class="bg-gray-700 p-2 hover:bg-gray-600 focus:ring-gray-500"
+          >
+            <span class="mb-1 block h-0.5 w-6 bg-gray-400"></span>
+            <span class="mb-1 block h-0.5 w-6 bg-gray-400"></span>
+            <span class="block h-0.5 w-6 bg-gray-400"></span>
+          </FwbButton>
+          <span class="text-lg font-medium">Boards</span>
+        </div>
         <SearchBoards />
       </div>
     </header>
     <Sidebar :isSidebarOpen="isSidebarOpen" :loggedIn="loggedIn" @logout="logoutUser" />
     <CreateBoard />
+    <main class="mt-16 p-6">
+      <h2 class="mb-6 text-xl font-bold">Your Boards</h2>
+      <div
+        v-if="boards.length"
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      >
+        <BoardCard v-for="board in boards" :key="board.id" :board="board" class="h-full" />
+        <RouterLink
+          to="/create-board"
+          class="flex flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-gray-500 shadow-md transition-colors hover:bg-gray-200"
+        >
+          <span>Create new board</span>
+          <span class="mt-1 text-sm">1 remaining</span>
+        </RouterLink>
+      </div>
+      <div v-else class="text-center text-gray-500 dark:text-gray-400">No boards yet!</div>
+    </main>
   </div>
 </template>
