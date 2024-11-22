@@ -9,6 +9,9 @@ export default authenticatedProcedure
   .input(
     boardSchema.pick({
       title: true,
+      selectedBackground: true,
+    }).partial({
+      selectedBackground: true,
     })
   )
 
