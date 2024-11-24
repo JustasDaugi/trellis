@@ -20,15 +20,18 @@ export function boardRepository(db: Database) {
         .executeTakeFirst()
     },
 
-    async findSelectedBackground(id: number): Promise<Pick<BoardPublic, 'selectedBackground'> | undefined> {
-      const selectedBackgroundKey = boardKeysPublic.filter(key => key === 'selectedBackground')
+    async findSelectedBackground(
+      id: number
+    ): Promise<Pick<BoardPublic, 'selectedBackground'> | undefined> {
+      const selectedBackgroundKey = boardKeysPublic.filter(
+        (key) => key === 'selectedBackground'
+      )
       return db
         .selectFrom('board')
         .select(selectedBackgroundKey)
         .where('id', '=', id)
         .executeTakeFirst()
     },
-    
 
     async findAll(limit: number, offset: number): Promise<BoardPublic[]> {
       return db
@@ -38,8 +41,6 @@ export function boardRepository(db: Database) {
         .offset(offset)
         .orderBy('id', 'desc')
         .execute()
-        
-
     },
 
     async update(
