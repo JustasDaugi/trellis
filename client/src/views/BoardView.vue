@@ -3,7 +3,7 @@ import { trpc } from '@/trpc'
 import { ref, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddListButton from '../components/BoardView/AddListButton.vue'
-import ThreeVerticalDots from '../components/BoardView/ThreeVerticalDots.vue'
+import VerticalDotsMenu from '../components/BoardView/VerticalDotsMenu.vue'
 import { useBackgroundImage } from '@/utils/fetchImage'
 import type { ListPublic, BoardPublic } from '@server/shared/types'
 
@@ -78,19 +78,23 @@ const { backgroundImageUrl } = useBackgroundImage(board)
           </button>
           <h1 class="ml-4 text-white">{{ board.title }}</h1>
         </div>
-        <ThreeVerticalDots />
       </div>
       <main class="mt-8 p-6">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div
             v-for="list in lists"
-            :key="Number(list.id)"
+            :key="list.id"
             class="relative rounded-lg bg-black bg-opacity-25 p-4 text-white shadow-md"
           >
             <h2 class="mb-2 truncate text-lg font-semibold text-white hover:text-blue-300">
               {{ list.title }}
             </h2>
-            <ThreeVerticalDots class="absolute right-4 top-4 text-white focus:outline-none" />
+            <VerticalDotsMenu
+              class="absolute right-4 top-4 text-white focus:outline-none"
+              :list="list"
+              @change-name="newName => (list.title = newName)"
+              @delete-list="fetchLists"
+            />
             <button
               class="mt-4 text-sm font-medium text-blue-400 hover:underline focus:outline-none"
             >
