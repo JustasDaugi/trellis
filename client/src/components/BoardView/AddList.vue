@@ -6,7 +6,7 @@ import useErrorMessage from '@/composables/useErrorMessage'
 
 const emit = defineEmits(['list-created'])
 const route = useRoute()
-const isAddingList = ref(false)
+const addListRef = ref(false)
 const listForm = ref({
   title: '',
 })
@@ -22,7 +22,7 @@ const [createList, errorMessage] = useErrorMessage(async () => {
       console.log('List created successfully:', list)
       emit('list-created', list)
       listForm.value.title = ''
-      isAddingList.value = false
+      addListRef.value = false
     }
   } catch (error) {
     console.log('List creation failed:', error)
@@ -31,14 +31,14 @@ const [createList, errorMessage] = useErrorMessage(async () => {
 })
 
 const toggleAddList = () => {
-  isAddingList.value = !isAddingList.value
+  addListRef.value = !addListRef.value
 }
 </script>
 
 <template>
   <div>
     <button
-      v-if="!isAddingList"
+      v-if="!addListRef"
       @click="toggleAddList"
       class="h-16 w-48 rounded-lg bg-black text-blue-400 shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
