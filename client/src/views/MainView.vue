@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import Sidebar from '../components/Sidebar.vue'
-import CreateBoard from '../components/MainView/CreateBoard.vue'
-import SearchBoards from '../components/SearchBoards.vue'
+import Sidebar from '../components/MainView/Sidebar.vue'
+import CreateBoard from '../components/CreateBoard/CreateBoard.vue'
+import SearchBoards from '../components/BoardView/SearchBoards.vue'
 import BoardCard from '../components/MainView/BoardCard.vue'
 import { FwbButton } from 'flowbite-vue'
 import { isLoggedIn, logout } from '@/stores/user'
