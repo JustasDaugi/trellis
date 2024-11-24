@@ -3,7 +3,7 @@ import { trpc } from '@/trpc'
 import { ref, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddListButton from '../components/BoardView/AddListButton.vue'
-import VerticalDotsMenu from '../components/BoardView/VerticalDotsMenu.vue'
+import DropdownMenu from '../components/BoardView/DropdownMenu.vue'
 import { useBackgroundImage } from '@/utils/fetchImage'
 import type { ListPublic, BoardPublic } from '@server/shared/types'
 
@@ -89,7 +89,7 @@ const { backgroundImageUrl } = useBackgroundImage(board)
             <h2 class="mb-2 truncate text-lg font-semibold text-white hover:text-blue-300">
               {{ list.title }}
             </h2>
-            <VerticalDotsMenu
+            <DropdownMenu
               class="absolute right-4 top-4 text-white focus:outline-none"
               :list="list"
               @change-name="newName => (list.title = newName)"
