@@ -3,7 +3,8 @@ import { trpc } from '@/trpc'
 import { ref, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddListButton from '../components/BoardView/AddListButton.vue'
-import DropdownMenu from '../components/BoardView/DropdownMenu.vue'
+import ListDropdown from '../components/BoardView/List/ListDropdown.vue'
+import BoardDropdown from '../components/BoardView/Board/BoardDropdown.vue'
 import { useBackgroundImage } from '@/utils/fetchImage'
 import type { ListPublic, BoardPublic } from '@server/shared/types'
 
@@ -61,7 +62,6 @@ const { backgroundImageUrl } = useBackgroundImage(board)
     <div class="absolute inset-0 bg-black opacity-50"></div>
 
     <div class="relative z-10">
-      <!-- Header -->
       <div class="relative flex items-center justify-between bg-transparent p-4">
         <div class="flex items-center">
           <button class="text-white" @click="navigateToMainView">
@@ -78,6 +78,16 @@ const { backgroundImageUrl } = useBackgroundImage(board)
           </button>
           <h1 class="ml-4 text-white">{{ board.title }}</h1>
         </div>
+        <BoardDropdown
+          v-if="board"
+          :board="board"
+          @change-name="
+            (newName) => {
+              if (board) board.title = newName
+            }
+          "
+          @delete-board="navigateToMainView"
+        />
       </div>
       <main class="mt-8 p-6">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -89,10 +99,10 @@ const { backgroundImageUrl } = useBackgroundImage(board)
             <h2 class="mb-2 truncate text-lg font-semibold text-white hover:text-blue-300">
               {{ list.title }}
             </h2>
-            <DropdownMenu
+            <ListDropdown
               class="absolute right-4 top-4 text-white focus:outline-none"
               :list="list"
-              @change-name="newName => (list.title = newName)"
+              @change-name="(newName) => (list.title = newName)"
               @delete-list="fetchLists"
             />
             <button
