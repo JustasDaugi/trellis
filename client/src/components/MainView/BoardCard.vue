@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router'
 import type { Selectable } from 'kysely'
 import type { BoardPublic } from '@server/shared/types'
 import { getBackgroundImageUrl } from '@/utils/fetchImage'
+
 const props = defineProps<{
   board: Selectable<BoardPublic>
 }>()
