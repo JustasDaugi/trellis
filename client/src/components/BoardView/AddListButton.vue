@@ -9,9 +9,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div
-    class="flex flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-gray-500 shadow-md transition-colors hover:bg-gray-200"
-  >
+  <div class="flex flex-col items-center justify-center p-4 transition-colors">
     <AddList @list-created="$emit('list-created', $event)" />
   </div>
 </template>
