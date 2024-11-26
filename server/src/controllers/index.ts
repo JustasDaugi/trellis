@@ -3,7 +3,7 @@ import board from './board'
 import user from './user'
 import list from './list'
 import card from './card'
-import templates from './templates'
+import template from './template'
 
 
 export const appRouter = router({
@@ -11,7 +11,7 @@ export const appRouter = router({
   list,
   card,
   user,
-  templates,
+  template,
 })
 
 export type AppRouter = typeof appRouter
