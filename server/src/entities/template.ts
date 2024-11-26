@@ -13,6 +13,7 @@ export const boardTemplateSchema = z.object({
   selectedBackground: z.string().nullable(),
   createdAt: z.date().default(() => new Date()),
   updatedAt: z.date().default(() => new Date()),
+  userId: idSchema.optional(),
 })
 
 export const boardTemplateKeysAll = Object.keys(
