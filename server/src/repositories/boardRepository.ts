@@ -33,12 +33,11 @@ export function boardRepository(db: Database) {
         .executeTakeFirst()
     },
 
-    async findAll(limit: number, offset: number): Promise<BoardPublic[]> {
+    async findAllByUserId(userId: number): Promise<BoardPublic[]> {
       return db
         .selectFrom('board')
         .select(boardKeysPublic)
-        .limit(limit)
-        .offset(offset)
+        .where('userId', '=', userId)
         .orderBy('id', 'desc')
         .execute()
     },
