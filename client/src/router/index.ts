@@ -26,6 +26,21 @@ const router = createRouter({
       component: () => import('../views/BoardView.vue'),
     },
     {
+      path: '/create-board',
+      name: 'CreateBoard',
+      component: () => import('../components/MainView/CreateBoard/CreateBoard.vue'),
+    },
+    {
+      path: '/templates',
+      name: 'TemplateView',
+      component: () => import('../views/TemplateView.vue'),
+    },
+    {
+      path: '/templates/board/:id',
+      name: 'TemplateBoard',
+      component: () => import('../views/TemplateBoardView.vue'),
+    },
+    {
       path: '/',
       name: 'Home',
       component: HomeView,
@@ -41,7 +56,13 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    if (to.name === 'MainView' || to.path.startsWith('/dashboard') || to.name === 'Board') {
+    if (
+      to.name === 'MainView' ||
+      to.path.startsWith('/dashboard') ||
+      to.name === 'Board' ||
+      to.name === 'TemplateView' ||
+      to.name === 'TemplateBoard'
+    ) {
       next({ name: 'Home' })
     } else {
       next()
