@@ -4,83 +4,71 @@ import type {
   ListTemplatePublic,
   CardTemplatePublic,
 } from '@server/entities/templates'
+import {
+  boardTemplateKeysPublic,
+  listTemplateKeysPublic,
+  cardTemplateKeysPublic,
+} from '@server/entities/templates'
 import { sql } from 'kysely'
 
 export function templateRepository(db: Database) {
   return {
-    async findBoardTemplate(
+    async findCopiedBoard(
       id: number
     ): Promise<BoardTemplatePublic | undefined> {
       return db
-        .selectFrom('boardTemplate')
-        .select([
-          'id',
-          'title',
-          'createdAt',
-          'updatedAt',
-          'selectedBackground'
-        ])
-        .where('id', '=', id)
-        .executeTakeFirst()
-    },
-
-    async findBoard(id: number): Promise<BoardTemplatePublic | undefined> {
-      return db
         .selectFrom('board')
-        .select([
-          'id',
-          'title',
-          'createdAt',
-          'updatedAt',
-          'selectedBackground'
-        ])
+        .select(boardTemplateKeysPublic)
         .where('id', '=', id)
         .executeTakeFirst()
     },
 
-    async findListTemplates(
-      boardTemplateId: number
-    ): Promise<ListTemplatePublic[]> {
+    async findAll(): Promise<BoardTemplatePublic[]> {
+      return db
+        .selectFrom('boardTemplate')
+        .select(boardTemplateKeysPublic)
+        .orderBy('id', 'desc')
+        .execute()
+    },
+
+    async findById(id: number): Promise<BoardTemplatePublic | undefined> {
+      return db
+        .selectFrom('boardTemplate')
+        .select(boardTemplateKeysPublic)
+        .where('id', '=', id)
+        .executeTakeFirst()
+    },
+
+    async findByBoardId(boardId: number): Promise<ListTemplatePublic[]> {
       return db
         .selectFrom('listTemplate')
-        .select(['id', 'title', 'order', 'boardId', 'createdAt', 'updatedAt'])
-        .where('boardId', '=', boardTemplateId)
-        .orderBy('order')
+        .select(listTemplateKeysPublic)
+        .where('boardId', '=', boardId)
+        .orderBy('order', 'asc')
         .execute()
     },
 
-    async findCardTemplates(
-      listTemplateId: number
-    ): Promise<CardTemplatePublic[]> {
+    async findByListId(listId: number): Promise<CardTemplatePublic[]> {
       return db
         .selectFrom('cardTemplate')
-        .select([
-          'id',
-          'title',
-          'description',
-          'order',
-          'listId',
-          'createdAt',
-          'updatedAt',
-        ])
-        .where('listId', '=', listTemplateId)
-        .orderBy('order')
+        .select(cardTemplateKeysPublic)
+        .where('listId', '=', listId)
+        .orderBy('order', 'asc')
         .execute()
     },
 
-    async copyBoard(boardTemplateId: number, userId: number) {
+    async copyBoard(
+      boardTemplateId: number,
+      userId: number,
+      customTitle?: string
+    ) {
       return db
         .insertInto('board')
-        .columns([
-          'title',
-          'userId',
-        ])
+        .columns(['title', 'userId'])
         .expression(
           db
             .selectFrom('boardTemplate')
-            .select([
-              'title',
-            ])
+            .select([sql`${customTitle || 'title'}`.as('title')])
             .select(sql`${userId}`.as('userId'))
             .where('id', '=', boardTemplateId)
         )
