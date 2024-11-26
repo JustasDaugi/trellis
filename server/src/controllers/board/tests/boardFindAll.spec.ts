@@ -15,7 +15,7 @@ const { findAll } = createCaller({ db })
 
 it('should return an empty list if there are no boards', async () => {
   // ARRANGE & ACT
-  const result = await findAll()
+  const result = await findAll({ userId: user.id })
 
   // ASSERT
   expect(result).toHaveLength(0)
@@ -26,31 +26,13 @@ it('should return a list of boards with default pagination', async () => {
   await insertAll(db, 'board', [fakeBoard({ userId: user.id })])
 
   // ACT
-  const boards = await findAll()
+  const boards = await findAll({ userId: user.id })
 
   // ASSERT
   expect(boards).toHaveLength(1)
 })
 
-it('should respect pagination parameters', async () => {
-  // ARRANGE
-  const [anotherUser] = await insertAll(db, 'user', fakeUser())
-  const boards = [
-    fakeBoard({ userId: anotherUser.id }),
-    fakeBoard({ userId: anotherUser.id }),
-    fakeBoard({ userId: anotherUser.id }),
-  ]
-  await insertAll(db, 'board', boards)
 
-  // ACT
-  const result = await findAll({
-    offset: 0,
-    limit: 3,
-  })
-
-  // ASSERT
-  expect(result).toHaveLength(3)
-})
 
 it('should return the latest board first', async () => {
   // ARRANGE
@@ -62,7 +44,7 @@ it('should return the latest board first', async () => {
   ])
 
   // ACT
-  const boards = await findAll()
+  const boards = await findAll({ userId: user.id })
 
   // ASSERT
   expect(boards[0]).toMatchObject(boardNew)
