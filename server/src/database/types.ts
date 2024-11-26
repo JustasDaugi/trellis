@@ -22,6 +22,7 @@ export interface BoardTemplate {
   selectedBackground: string | null
   title: string
   updatedAt: Generated<Timestamp>
+  userId: number | null
 }
 
 export interface Card {
