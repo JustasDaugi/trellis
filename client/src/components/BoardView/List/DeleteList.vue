@@ -1,27 +1,3 @@
-<template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
-  >
-    <div class="w-96 rounded-md bg-white p-6 shadow-lg">
-      <h3 class="mb-4 text-lg font-semibold">Delete List</h3>
-      <p>Are you sure you want to delete the list "{{ list.title }}"?</p>
-      <p v-if="deleteErrorMessage" class="mt-2 text-sm text-red-500">{{ deleteErrorMessage }}</p>
-      <div class="mt-4 flex justify-end">
-        <button class="mr-2 rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300" @click="close">
-          Cancel
-        </button>
-        <button
-          class="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-          @click="confirmDelete"
-        >
-          Confirm
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, defineEmits, defineProps } from 'vue'
 import { trpc } from '@/trpc'
@@ -70,3 +46,27 @@ defineExpose({
   open,
 })
 </script>
+
+<template>
+  <div
+    v-if="isOpen"
+    class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
+  >
+    <div class="w-96 rounded-md bg-white p-6 shadow-lg">
+      <h3 class="mb-4 text-lg font-semibold">Delete List</h3>
+      <p>Are you sure you want to delete the list "{{ list.title }}"?</p>
+      <p v-if="deleteErrorMessage" class="mt-2 text-sm text-red-500">{{ deleteErrorMessage }}</p>
+      <div class="mt-4 flex justify-end">
+        <button class="mr-2 rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300" @click="close">
+          Cancel
+        </button>
+        <button
+          class="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+          @click="confirmDelete"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
