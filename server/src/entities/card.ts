@@ -6,7 +6,7 @@ import { idSchema } from './shared'
 export const cardSchema = z.object({
   createdAt: z.number().default(() => Date.now()),
   updatedAt: z.number().default(() => Date.now()),
-  description: z.string().min(1).max(1000),
+  description: z.string().max(1000).optional(),
   id: idSchema,
   listId: idSchema,
   order: z.number().nullable(),
