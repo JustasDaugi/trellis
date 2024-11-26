@@ -6,7 +6,7 @@ import CreateBoard from '../components/MainView/CreateBoard/CreateBoard.vue'
 import SearchBoards from '../components/MainView/SearchBoards.vue'
 import BoardCard from '../components/MainView/BoardCard.vue'
 import { FwbButton } from 'flowbite-vue'
-import { isLoggedIn, logout } from '@/stores/user'
+import { isLoggedIn, logout, authUserId } from '@/stores/user'
 import { trpc } from '@/trpc'
 import type { Selectable } from 'kysely'
 import type { BoardPublic } from '@server/shared/types'
@@ -31,7 +31,16 @@ const loggedIn = computed(() => isLoggedIn.value)
 const boards = ref<Selectable<BoardPublic>[]>([])
 
 const fetchBoards = async () => {
-  boards.value = await trpc.board.findAll.query()
+  if (!authUserId.value) {
+    console.error('User is not authenticated.')
+    return
+  }
+
+  try {
+    boards.value = await trpc.board.findAll.query({ userId: authUserId.value })
+  } catch (error) {
+    console.error('Failed to fetch boards:', error)
+  }
 }
 
 onMounted(fetchBoards)
