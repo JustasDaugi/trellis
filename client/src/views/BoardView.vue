@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import { trpc } from '@/trpc'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { trpc } from '@/trpc'
 import AddListButton from '../components/BoardView/AddListButton.vue'
 import ListDropdown from '../components/BoardView/List/ListDropdown.vue'
 import BoardDropdown from '../components/BoardView/Board/BoardDropdown.vue'
+import AddCard from '../components/AddCard.vue'
+import CardActions from '../components/BoardView/Card/CardActions.vue'
 import { useBackgroundImage } from '@/utils/fetchImage'
-import type { ListPublic, BoardPublic } from '@server/shared/types'
+import type { ListPublic, BoardPublic, CardPublic } from '@server/shared/types'
+
+type ListCards = ListPublic & {
+  cards: CardPublic[]
+}
 
 const route = useRoute()
 const router = useRouter()
 const board = ref<BoardPublic | null>(null)
-const lists = ref<ListPublic[]>([])
+const lists = ref<ListCards[]>([])
+const selectedCard = ref<CardPublic | null>(null)
+const showDialog = ref(false)
 
 const boardId = Number(route.params.id)
 
@@ -32,14 +40,28 @@ onBeforeMount(async () => {
 const fetchLists = async () => {
   try {
     const fetchedLists = await trpc.list.find.mutate({ boardId })
-    lists.value = fetchedLists
+    const listsWithCards: ListCards[] = fetchedLists.map((list: ListPublic) => ({
+      ...list,
+      cards: [],
+    }))
+    await Promise.all(
+      listsWithCards.map(async (list) => {
+        try {
+          const fetchedCards = await trpc.card.find.mutate({ listId: list.id })
+          list.cards = fetchedCards
+        } catch (error) {
+          console.error(`Error fetching cards for list ${list.id}:`, error)
+        }
+      })
+    )
+    lists.value = listsWithCards
   } catch (error) {
     console.error('Error fetching lists:', error)
   }
 }
 
 const renderList = (newList: ListPublic) => {
-  lists.value.push(newList)
+  lists.value.push({ ...newList, cards: [] })
 }
 
 function navigateToMainView() {
@@ -47,6 +69,37 @@ function navigateToMainView() {
 }
 
 const { backgroundImageUrl } = useBackgroundImage(board)
+
+const createCard = (listId: number, card: CardPublic) => {
+  const list = lists.value.find((lst) => lst.id === listId)
+  if (list) {
+    list.cards.push(card)
+  } else {
+    console.error(`List with ID ${listId} not found`)
+  }
+}
+
+const openCardDialog = (card: CardPublic) => {
+  selectedCard.value = null
+  nextTick(() => {
+    selectedCard.value = card
+    showDialog.value = true
+  })
+}
+
+const closeCardDialog = () => {
+  selectedCard.value = null
+  showDialog.value = false
+}
+
+const handleCardUpdate = async () => {
+  await fetchLists()
+}
+
+const handleCardDelete = async () => {
+  await fetchLists()
+  closeCardDialog()
+}
 </script>
 
 <template>
@@ -90,11 +143,13 @@ const { backgroundImageUrl } = useBackgroundImage(board)
         />
       </div>
       <main class="mt-8 p-6">
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div
+          class="fixed-spacing grid grid-cols-1 items-start gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
           <div
             v-for="list in lists"
             :key="list.id"
-            class="relative rounded-lg bg-black bg-opacity-25 p-4 text-white shadow-md"
+            class="relative flex max-w-[20rem] flex-col rounded-lg bg-black bg-opacity-25 p-4 text-white shadow-md"
           >
             <h2 class="mb-2 truncate text-lg font-semibold text-white hover:text-blue-300">
               {{ list.title }}
@@ -105,19 +160,36 @@ const { backgroundImageUrl } = useBackgroundImage(board)
               @change-name="(newName) => (list.title = newName)"
               @delete-list="fetchLists"
             />
-            <button
-              class="mt-4 text-sm font-medium text-blue-400 hover:underline focus:outline-none"
+            <div
+              v-for="card in list.cards"
+              :key="card.id"
+              class="mb-2 w-full cursor-pointer rounded bg-white p-2 text-black hover:bg-gray-100"
+              @click="openCardDialog(card)"
             >
-              + Add card
-            </button>
+              <h3 class="text-sm font-semibold">{{ card.title }}</h3>
+              <p class="text-xs">{{ card.description }}</p>
+            </div>
+            <AddCard :listId="list.id" @card-created="(card) => createCard(list.id, card)" />
           </div>
-          <AddListButton @list-created="renderList" />
+          <div
+            class="relative flex w-full flex-col rounded-lg bg-black bg-opacity-25 p-4 text-white shadow-md"
+          >
+            <AddListButton @list-created="renderList" />
+          </div>
         </div>
       </main>
     </div>
-  </div>
-
-  <div v-else>
-    <p class="mt-10 text-center text-gray-500">Loading board...</p>
+    <CardActions
+      v-if="selectedCard"
+      :card="selectedCard"
+      @update-card="handleCardUpdate"
+      @delete-card="handleCardDelete"
+    />
   </div>
 </template>
+
+<style scoped>
+.fixed-spacing {
+  gap: 1rem !important;
+}
+</style>
