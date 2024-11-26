@@ -3,12 +3,12 @@ import type {
   BoardTemplatePublic,
   ListTemplatePublic,
   CardTemplatePublic,
-} from '@server/entities/templates'
+} from '@server/entities/template'
 import {
   boardTemplateKeysPublic,
   listTemplateKeysPublic,
   cardTemplateKeysPublic,
-} from '@server/entities/templates'
+} from '@server/entities/template'
 import { sql } from 'kysely'
 
 export function templateRepository(db: Database) {
