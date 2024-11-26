@@ -10,16 +10,16 @@ const db = await wrapInRollbacks(createTestDatabase())
 
 describe('board findAll', async () => {
   await clearTables(db, ['board'])
-  const [owner, otherUser] = await insertAll(db, 'user', [
+  const [owner] = await insertAll(db, 'user', [
     fakeUser(),
     fakeUser(),
   ])
   
-  const { findAll } = createCaller({ db })
+  const { findAll: findAllByUserId } = createCaller({ db })
 
   it('should return an empty list if there are no boards', async () => {
     // ARRANGE & ACT
-    const result = await findAll()
+    const result = await findAllByUserId({ userId: owner.id })
 
     // ASSERT
     expect(result).toHaveLength(0)
@@ -30,29 +30,10 @@ describe('board findAll', async () => {
     await insertAll(db, 'board', [fakeBoard({ userId: owner.id })])
 
     // ACT
-    const boards = await findAll()
+    const boards = await findAllByUserId({ userId: owner.id })
 
     // ASSERT
     expect(boards).toHaveLength(1)
-  })
-
-  it('should respect pagination parameters', async () => {
-    // ARRANGE
-    const boards = [
-      fakeBoard({ userId: otherUser.id }),
-      fakeBoard({ userId: otherUser.id }),
-      fakeBoard({ userId: otherUser.id })
-    ]
-    await insertAll(db, 'board', boards)
-
-    // ACT
-    const result = await findAll({
-      offset: 0,
-      limit: 3
-    })
-
-    // ASSERT
-    expect(result).toHaveLength(3)
   })
 
   it('should return the latest board first', async () => {
@@ -65,7 +46,7 @@ describe('board findAll', async () => {
     ])
 
     // ACT
-    const boards = await findAll()
+    const boards = await findAllByUserId({ userId: owner.id })
 
     // ASSERT
     expect(boards[0]).toMatchObject(boardNew)
@@ -78,7 +59,7 @@ describe('board findAll', async () => {
     await insertAll(db, 'board', boards)
 
     // ACT
-    const result = await findAll({})
+    const result = await findAllByUserId({ userId: owner.id })
 
     // ASSERT
     expect(result).toHaveLength(20)
