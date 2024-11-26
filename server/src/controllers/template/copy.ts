@@ -1,7 +1,7 @@
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
 import provideRepos from '@server/trpc/provideRepos'
 import { templateRepository } from '@server/repositories/templateRepository'
-import { boardTemplateSchema } from '@server/entities/templates'
+import { boardTemplateSchema } from '@server/entities/template'
 import { type BoardPublic } from '@server/entities/board'
 
 export default authenticatedProcedure
