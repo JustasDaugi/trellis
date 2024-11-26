@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { RouterLink } from 'vue-router'
 defineProps(['isSidebarOpen', 'loggedIn'])
 defineEmits(['logout'])
 </script>
@@ -12,7 +13,10 @@ defineEmits(['logout'])
     <div class="p-4">
       <ul class="space-y-2">
         <li>
-          <a href="/templates" class="flex items-center p-2 hover:bg-gray-700">
+          <RouterLink
+            to="/templates"
+            class="flex items-center p-2 hover:bg-gray-700"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -28,7 +32,7 @@ defineEmits(['logout'])
               />
             </svg>
             Browse Templates
-          </a>
+          </RouterLink>
         </li>
         <li v-if="loggedIn">
           <button
