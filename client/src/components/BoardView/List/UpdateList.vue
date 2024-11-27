@@ -49,7 +49,7 @@ const changeName = async () => {
   <div>
     <button
       @click="openDialog"
-      class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+      class="w-full px-4 py-2 text-left text-sm text-black hover:bg-gray-100"
     >
       Change name
     </button>
@@ -58,16 +58,16 @@ const changeName = async () => {
       class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
     >
       <div class="w-96 rounded-md bg-white p-6 shadow-lg">
-        <h3 class="mb-4 text-lg font-semibold">Change Name</h3>
+        <h3 class="mb-4 text-lg font-semibold text-black">Change Name</h3>
         <input
           v-model="listName"
           type="text"
-          class="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring"
+          class="w-full rounded-md border px-4 py-2 text-black focus:outline-none focus:ring"
         />
         <p v-if="updateErrorMessage" class="mt-2 text-sm text-red-500">{{ updateErrorMessage }}</p>
         <div class="mt-4 flex justify-end">
           <button
-            class="mr-2 rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300"
+            class="mr-2 rounded-md bg-gray-400 px-4 py-2 text-white text-opacity-90 hover:bg-gray-500"
             @click="closeDialog"
           >
             Cancel
