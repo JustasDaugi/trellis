@@ -40,14 +40,14 @@ const toggleAddList = () => {
     <button
       v-if="!addListRef"
       @click="toggleAddList"
-      class="h-16 w-48 rounded-lg bg-black text-blue-400 shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="h-16 w-48 rounded-lg bg-black text-base font-medium text-blue-400 shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
-      Add list
+      + Add list
     </button>
 
     <!-- Entry Field -->
     <div v-else class="w-full">
-      <div class="flex w-64 items-center rounded-lg bg-black p-4">
+      <div class="flex w-52 items-center rounded-lg bg-black p-4">
         <input
           v-model="listForm.title"
           type="text"
