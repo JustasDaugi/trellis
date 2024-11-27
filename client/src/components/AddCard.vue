@@ -67,7 +67,7 @@ const addCardToggle = () => {
       <input
         v-model="cardForm.title"
         placeholder="Card name"
-        class="mr-2 w-3/4 rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        class="mr-2 w-3/4 rounded-md border border-gray-300 p-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
         maxlength="500"
         @keyup.enter="createCard"
       />
