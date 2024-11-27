@@ -125,7 +125,7 @@ onBeforeMount(fetchBoard)
             <AlertError :message="errorMessage" />
             <button
               type="submit"
-              class="bg-orchid-500 hover:bg-orchid-600 mt-4 w-full rounded-md px-4 py-2 text-white"
+              class="bg-orchid-500 hover:bg-orchid-600 mt-4 w-full rounded-md px-4 py-2 text-black"
             >
               Create
             </button>
