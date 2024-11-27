@@ -171,11 +171,7 @@ const handleCardDelete = async () => {
             </div>
             <AddCard :listId="list.id" @card-created="(card) => createCard(list.id, card)" />
           </div>
-          <div
-            class="relative flex w-full flex-col rounded-lg bg-black bg-opacity-25 p-4 text-white shadow-md"
-          >
             <AddListButton @list-created="renderList" />
-          </div>
         </div>
       </main>
     </div>
