@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import DropdownMenu from '@/components/DropdownMenu.vue'
-import type { ListPublic } from '@server/shared/types'
+import type { BoardPublic, ListPublic } from '@server/shared/types'
 import UpdateList from './UpdateList.vue'
 import DeleteList from './DeleteList.vue'
 import { ref } from 'vue'
 
 const props = defineProps<{
-  list: ListPublic
+  list: ListPublic,
+  board: BoardPublic
 }>()
 
 const emit = defineEmits<{
@@ -30,7 +31,7 @@ const changeName = (newName: string) => {
 </script>
 
 <template>
-  <DropdownMenu ref="dropdownMenuRef">
+  <DropdownMenu ref="dropdownMenuRef" :board="props.board">
     <template #content>
       <UpdateList :list="props.list" @change-name="changeName" />
       <button
