@@ -157,6 +157,7 @@ const handleCardDelete = async () => {
             <ListDropdown
               class="absolute right-4 top-4 text-white focus:outline-none"
               :list="list"
+              :board="board"
               @change-name="(newName) => (list.title = newName)"
               @delete-list="fetchLists"
             />
