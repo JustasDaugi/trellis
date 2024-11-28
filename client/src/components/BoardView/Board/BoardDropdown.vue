@@ -30,7 +30,7 @@ const changeName = (newName: string) => {
 </script>
 
 <template>
-  <DropdownMenu ref="dropdownMenuRef">
+  <DropdownMenu ref="dropdownMenuRef" :board="props.board">
     <template #content>
       <UpdateBoard :board="props.board" @change-name="changeName" />
       <button
