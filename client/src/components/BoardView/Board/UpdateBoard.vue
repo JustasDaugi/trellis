@@ -55,15 +55,24 @@ const changeName = async () => {
     </button>
     <div
       v-if="isDialogOpen"
-      class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-[1000] flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div class="w-96 rounded-md bg-white p-6 shadow-lg">
-        <h3 class="mb-4 text-lg font-semibold">Change Name</h3>
-        <input
-          v-model="boardName"
-          type="text"
-          class="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring"
-        />
+      <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg">
+        <h2 class="mb-4 text-xl font-bold">Change Name</h2>
+        <div class="mb-4">
+          <label for="board-name" class="mb-2 block text-sm font-medium text-gray-700">
+            Board name
+          </label>
+          <input
+            id="board-name"
+            v-model="boardName"
+            type="text"
+            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm"
+            required
+            maxlength="500"
+            placeholder="Enter new board name"
+          />
+        </div>
         <p v-if="updateErrorMessage" class="mt-2 text-sm text-red-500">{{ updateErrorMessage }}</p>
         <div class="mt-4 flex justify-end">
           <button
@@ -73,7 +82,7 @@ const changeName = async () => {
             Cancel
           </button>
           <button
-            class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            class="bg-orchid-500 hover:bg-orchid-600 rounded-md px-4 py-2 text-black font-bold"
             @click="changeName"
           >
             Confirm
