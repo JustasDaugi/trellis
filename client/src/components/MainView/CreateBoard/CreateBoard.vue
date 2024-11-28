@@ -59,7 +59,7 @@ function selectBackground(background: string) {
       >
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
-      <span class="text-black font-bold">Create board</span>
+      <span class="font-bold text-black">Create board</span>
     </button>
     <Teleport to="body">
       <div
@@ -94,8 +94,8 @@ function selectBackground(background: string) {
             <AlertError :message="errorMessage" />
             <button
               type="submit"
-              class="bg-orchid-500 hover:bg-orchid-600 mt-4 w-full rounded-md px-4 py-2 text-black font-bold disabled:opacity-50"
-              :disabled="!boardForm.title || !boardForm.selectedBackground"
+              class="bg-orchid-500 hover:bg-orchid-600 mt-4 w-full rounded-md px-4 py-2 font-bold text-black disabled:opacity-50"
+              :disabled="!boardForm.title"
             >
               Create
             </button>
@@ -107,8 +107,6 @@ function selectBackground(background: string) {
   </div>
 </template>
 
-
-
 <style scoped>
 .border-orchid-500 {
   border-color: #9d4edd;
@@ -118,3 +116,4 @@ function selectBackground(background: string) {
   cursor: pointer;
 }
 </style>
+
