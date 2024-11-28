@@ -1,67 +1,89 @@
+import { authContext, requestContext } from '@tests/utils/context'
 import { fakeBoard, fakeUser } from '@server/entities/tests/fakes'
 import { createTestDatabase } from '@tests/utils/database'
 import { createCallerFactory } from '@server/trpc'
 import { wrapInRollbacks } from '@tests/utils/transactions'
-import { clearTables, insertAll } from '@tests/utils/records'
+import { insertAll, selectAll } from '@tests/utils/records'
 import boardRouter from '..'
 
 const createCaller = createCallerFactory(boardRouter)
 const db = await wrapInRollbacks(createTestDatabase())
 
-describe('board findAll', async () => {
-  await clearTables(db, ['board'])
-  const [owner] = await insertAll(db, 'user', [
+describe('update board', async () => {
+  const [owner, otherUser] = await insertAll(db, 'user', [
     fakeUser(),
     fakeUser(),
   ])
-  
-  const { findAll: findAllByUserId } = createCaller({ db })
 
-  it('should return an empty list if there are no boards', async () => {
-    // ARRANGE & ACT
-    const result = await findAllByUserId({ userId: owner.id })
+  const [board] = await insertAll(
+    db,
+    'board',
+    fakeBoard({
+      userId: owner.id,
+    })
+  )
 
-    // ASSERT
-    expect(result).toHaveLength(0)
+  it('should throw an error if board does not exist', async () => {
+    // ARRANGE
+    const { update } = createCaller(authContext({ db }, owner))
+    const nonExistentBoardId = 99999
+
+    // ACT & ASSERT
+    await expect(
+      update({
+        id: nonExistentBoardId,
+        title: 'Updated Title',
+      })
+    ).rejects.toThrow(/not found/i)
   })
 
-  it('should return a list of boards with default pagination', async () => {
+  it('should throw an error if user is not authenticated', async () => {
     // ARRANGE
-    await insertAll(db, 'board', [fakeBoard({ userId: owner.id })])
+    const { update } = createCaller(requestContext({ db }))
 
-    // ACT
-    const boards = await findAllByUserId({ userId: owner.id })
-
-    // ASSERT
-    expect(boards).toHaveLength(1)
+    // ACT & ASSERT
+    await expect(
+      update({
+        id: board.id,
+        title: 'Updated Title',
+      })
+    ).rejects.toThrow(/Unauthenticated/i)
   })
 
-  it('should return the latest board first', async () => {
+  it('should throw an error if user is not authorized to update board', async () => {
     // ARRANGE
-    const [boardOld] = await insertAll(db, 'board', [
-      fakeBoard({ userId: owner.id })
-    ])
-    const [boardNew] = await insertAll(db, 'board', [
-      fakeBoard({ userId: owner.id })
-    ])
+    const { update } = createCaller(authContext({ db }, otherUser))
 
-    // ACT
-    const boards = await findAllByUserId({ userId: owner.id })
-
-    // ASSERT
-    expect(boards[0]).toMatchObject(boardNew)
-    expect(boards[1]).toMatchObject(boardOld)
+    // ACT & ASSERT
+    await expect(
+      update({
+        id: board.id,
+        title: 'Updated Title',
+      })
+    ).rejects.toThrow(/not authorized/i)
   })
 
-  it('should return all boards when no pagination is provided', async () => {
+  it('should update a board', async () => {
     // ARRANGE
-    const boards = Array(20).fill(null).map(() => fakeBoard({ userId: owner.id }))
-    await insertAll(db, 'board', boards)
+    const { update } = createCaller(authContext({ db }, owner))
+    const newTitle = 'Updated Board Title'
 
     // ACT
-    const result = await findAllByUserId({ userId: owner.id })
+    const result = await update({
+      id: board.id,
+      title: newTitle,
+    })
 
     // ASSERT
-    expect(result).toHaveLength(20)
+    expect(result).toMatchObject({
+      id: board.id,
+      title: newTitle,
+      userId: owner.id,
+    })
+
+    const [updatedBoard] = await selectAll(db, 'board', (eb) =>
+      eb('id', '=', board.id)
+    )
+    expect(updatedBoard.title).toBe(newTitle)
   })
 })
