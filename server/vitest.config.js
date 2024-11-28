@@ -1,10 +1,12 @@
-import path from 'node:path'
-import { defineConfig, loadEnv } from 'vite'
+import path from 'node:path';
+import { defineConfig, loadEnv } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   test: {
     environment: 'node',
+    isolate: true,
+    threads: false,
     globals: true,
     coverage: {
       provider: 'v8',
@@ -15,12 +17,20 @@ export default defineConfig({
         '**/src/database/**',
         '**/src/entities/**',
         '**/src/trpc/index.ts',
-        '**/src/repositories/index.ts',
+        '**/src/repositories/**',
       ],
     },
-
-    // necessary for Vitest VS Code extension to pick up env variables
     env: loadEnv('', process.cwd(), ''),
+    sequence: {
+      concurrent: false,
+      shuffle: false,
+
+    },
+    poolOptions: {
+      threads: {
+        isolate: true
+      }
+    }
   },
   resolve: {
     alias: {
@@ -28,4 +38,4 @@ export default defineConfig({
       '@tests': path.resolve(__dirname, './tests'),
     },
   },
-})
+});
