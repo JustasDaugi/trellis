@@ -70,7 +70,6 @@ const openCardDialog = (card: CardTemplatePublic) => {
 }
 </script>
 
-
 <template>
   <div v-if="board" class="relative min-h-screen">
     <div class="absolute inset-0 bg-black opacity-50"></div>
