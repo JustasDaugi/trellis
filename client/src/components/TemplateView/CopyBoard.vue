@@ -5,7 +5,7 @@ import { trpc } from '@/trpc'
 import useErrorMessage from '@/composables/useErrorMessage'
 import AlertError from '@/components/AlertError.vue'
 import BackgroundSelection from '../MainView/CreateBoard/BackgroundSelection.vue'
-import CloseButton from '../MainView/CreateBoard/CloseButton.vue'
+import CloseButton from '../CloseButton.vue'
 import type { BoardTemplatePublic } from '@server/shared/types'
 
 const router = useRouter()
