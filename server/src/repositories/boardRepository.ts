@@ -23,12 +23,9 @@ export function boardRepository(db: Database) {
     async findSelectedBackground(
       id: number
     ): Promise<Pick<BoardPublic, 'selectedBackground'> | undefined> {
-      const selectedBackgroundKey = boardKeysPublic.filter(
-        (key) => key === 'selectedBackground'
-      )
       return db
         .selectFrom('board')
-        .select(selectedBackgroundKey)
+        .select(['selectedBackground'])
         .where('id', '=', id)
         .executeTakeFirst()
     },
