@@ -1,39 +1,45 @@
 <script lang="ts" setup>
-import { ref, defineEmits, onMounted, onBeforeUnmount, defineExpose } from 'vue'
+import { ref, defineEmits, onMounted, onBeforeUnmount, defineExpose } from 'vue';
+import ShareBoard from '@/components/BoardView/Board/ShareBoard.vue';
+import type { BoardPublic } from '@server/shared/types';
 
 const emit = defineEmits<{
-  (e: 'toggle-dropdown'): void
-}>()
+  (e: 'toggle-dropdown'): void;
+}>();
 
-const isOpen = ref(false)
-const dropdownRef = ref<HTMLElement | null>(null)
+defineProps<{
+  board: BoardPublic;
+}>();
+
+const isOpen = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
 
 const toggleDropdown = () => {
-  isOpen.value = !isOpen.value
-  emit('toggle-dropdown')
-}
+  isOpen.value = !isOpen.value;
+  emit('toggle-dropdown');
+};
 
 const closeDropdown = () => {
-  isOpen.value = false
-}
+  isOpen.value = false;
+};
 
 const handleClickOutside = (event: MouseEvent) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
-    closeDropdown()
+    closeDropdown();
   }
-}
+};
 
 onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutside)
-})
+  document.addEventListener('mousedown', handleClickOutside);
+});
 
 onBeforeUnmount(() => {
-  document.removeEventListener('mousedown', handleClickOutside)
-})
+  document.removeEventListener('mousedown', handleClickOutside);
+});
 
 defineExpose({
   closeDropdown,
-})
+});
 </script>
 
 <template>
@@ -52,6 +58,7 @@ defineExpose({
     </button>
     <div v-if="isOpen" class="absolute right-0 z-10 mt-2 w-40 rounded-md border bg-white shadow-lg">
       <slot name="content"></slot>
+      <ShareBoard :boardId="board.id" />
     </div>
   </div>
 </template>
