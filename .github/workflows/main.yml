@@ -191,11 +191,15 @@ jobs:
                 "NODE_ENV": "production",
                 "PORT": "3000",
                 "DATABASE_URL": "${{ secrets.PROD_DATABASE_URL }}",
-                "TOKEN_KEY": "${{ secrets.PROD_TOKEN_KEY }}"
+                "TOKEN_KEY": "${{ secrets.PROD_TOKEN_KEY }}",
+                "GMAIL_USER": "${{ secrets.GMAIL_USER }}",
+                "GMAIL_PASS": "${{ secrets.GMAIL_PASS }}",
+                "DOMAIN_LINK": "${{ vars.DOMAIN_LINK }}"
               }
             }
           }' > containers.json
-
+      
+      
       - name: Create public-endpoint.json file
         run: |
           echo '{
