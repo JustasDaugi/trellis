@@ -5,7 +5,7 @@ import { trpc } from '@/trpc'
 import useErrorMessage from '@/composables/useErrorMessage'
 import AlertError from '@/components/AlertError.vue'
 import BackgroundSelection from './BackgroundSelection.vue'
-import CloseButton from './CloseButton.vue'
+import CloseButton from '../../CloseButton.vue'
 
 const router = useRouter()
 const isDialogOpen = ref(false)
