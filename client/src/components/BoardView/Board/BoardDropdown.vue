@@ -37,6 +37,18 @@ const changeName = (newName: string) => {
   closeDropdown()
 }
 
+const cancelUpdate = () => {
+  closeDropdown()
+}
+
+const cancelDelete = () => {
+  closeDropdown()
+}
+
+const cancelShare = () => {
+  closeDropdown()
+}
+
 const handleClickOutside = (event: MouseEvent) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
     closeDropdown()
@@ -67,15 +79,28 @@ onBeforeUnmount(() => {
       </svg>
     </button>
     <div v-if="isOpen" class="absolute right-0 z-10 mt-2 w-40 rounded-md border bg-white shadow-lg">
-      <UpdateBoard :board="props.board" :closeDropdown="closeDropdown" @change-name="changeName" />
+      <UpdateBoard
+        :board="props.board"
+        :closeDropdown="closeDropdown"
+        @change-name="changeName"
+        @cancel="cancelUpdate"
+      />
       <button
         @click="onDelete"
         class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
       >
         Delete board
       </button>
-      <DeleteBoard ref="deleteBoardRef" :board="props.board" @delete-board="emit('delete-board')" />
-      <ShareBoard :boardId="props.board.id" />
+      <DeleteBoard
+        ref="deleteBoardRef"
+        :board="props.board"
+        @delete-board="emit('delete-board')"
+        @cancel="cancelDelete"
+      />
+      <ShareBoard
+        :boardId="props.board.id"
+        @cancel="cancelShare"
+      />
     </div>
   </div>
 </template>
