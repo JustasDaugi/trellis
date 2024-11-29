@@ -12,7 +12,8 @@ export default publicProcedure
   .input(
     cardSchema.pick({
       listId: true,
-    })
+      description: true
+    }).partial({ description: true})
   )
   .mutation(
     async ({ input: { listId }, ctx: { repos } }): Promise<CardPublic[]> => {
