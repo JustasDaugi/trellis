@@ -63,23 +63,23 @@ const toggleDeleteMessage = () => {
         class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
       >
         <div class="w-96 scale-95 transform rounded-md bg-white p-6 shadow-lg transition-transform">
-          <h3 class="mb-4 text-lg font-semibold">Manage Card</h3>
+          <h2 class="mb-4 text-xl font-bold text-gray-800">Manage Card</h2>
           <div class="mb-6">
-            <h4 class="text-md mb-2 font-semibold">Edit Card</h4>
+            <h4 class="text-lg mb-2 font-bold text-gray-700">Edit Card</h4>
             <label class="mb-4 block">
-              <span class="text-gray-700">Title</span>
+              <span class="mb-2 block text-sm font-medium text-gray-700">Title</span>
               <input
                 v-model="cardTitle"
                 type="text"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orchid-500 focus:ring focus:ring-orchid-200"
               />
             </label>
             <label class="mb-4 block">
-              <span class="text-gray-700">Description</span>
+              <span class="mb-2 block text-sm font-medium text-gray-700">Description</span>
               <textarea
                 v-model="cardDescription"
                 rows="3"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orchid-500 focus:ring focus:ring-orchid-200"
               ></textarea>
             </label>
             <p v-if="updateErrorMessage" class="mb-4 text-sm text-red-500">
@@ -87,7 +87,7 @@ const toggleDeleteMessage = () => {
             </p>
           </div>
           <div class="mb-4" v-if="isDeleteMessageVisible">
-            <p>Are you sure you want to delete this card?</p>
+            <p class="text-sm text-gray-700">Are you sure you want to delete this card?</p>
             <p v-if="deleteErrorMessage" class="mt-2 text-sm text-red-500">
               {{ deleteErrorMessage }}
             </p>
