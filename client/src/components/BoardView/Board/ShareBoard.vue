@@ -3,12 +3,17 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { trpc } from '@/trpc'
 import useErrorMessage from '@/composables/useErrorMessage'
+import CloseButton from '@/components/CloseButton.vue'
 
 const route = useRoute()
 
 const isDialogOpen = ref(false)
 const emailAddress = ref('')
 const successMessage = ref('')
+
+const emit = defineEmits<{
+  (e: 'cancel'): void
+}>()
 
 const openDialog = () => {
   isDialogOpen.value = true
@@ -18,6 +23,7 @@ const openDialog = () => {
 const closeDialog = () => {
   isDialogOpen.value = false
   successMessage.value = ''
+  emit('cancel')
 }
 
 const [shareBoard, shareErrorMessage] = useErrorMessage(async () => {
@@ -59,6 +65,8 @@ const share = async () => {
       class="fixed inset-0 z-[1000] flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
       <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg">
+        <CloseButton @close="closeDialog" />
+
         <h2 class="mb-4 text-xl font-bold">Share via Gmail</h2>
         <div class="mb-4">
           <label for="email-address" class="mb-2 block text-sm font-medium text-gray-700">
@@ -71,7 +79,6 @@ const share = async () => {
             class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm"
             required
             placeholder="Enter email address"
-            role="dialog"
           />
         </div>
         <p v-if="shareErrorMessage" class="mt-2 text-sm text-red-500">{{ shareErrorMessage }}</p>
