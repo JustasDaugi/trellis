@@ -49,7 +49,7 @@ const fetchLists = async () => {
       listsWithCards.map(async (list) => {
         try {
           const fetchedCards = await trpc.card.find.mutate({ listId: list.id })
-          list.cards = fetchedCards.map((card: { description: string }) => ({
+          list.cards = fetchedCards.map((card: { description: unknown }) => ({
             ...card,
             description: card.description || '',
           }))
