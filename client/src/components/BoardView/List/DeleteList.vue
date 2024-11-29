@@ -6,6 +6,7 @@ import type { ListPublic } from '@server/shared/types'
 
 const emit = defineEmits<{
   (e: 'delete-list'): void
+  (e: 'cancel'): void
 }>()
 
 const props = defineProps<{
@@ -14,12 +15,13 @@ const props = defineProps<{
 
 const isOpen = ref(false)
 
-const open = () => {
+const openDialog = () => {
   isOpen.value = true
 }
 
-const close = () => {
+const closeDialog = () => {
   isOpen.value = false
+  emit('cancel')
 }
 
 const [deleteList, deleteErrorMessage] = useErrorMessage(async () => {
@@ -29,7 +31,7 @@ const [deleteList, deleteErrorMessage] = useErrorMessage(async () => {
     })
     console.log(`List "${props.list.title}" deleted successfully.`)
     emit('delete-list')
-    close()
+    closeDialog()
   } catch (error) {
     console.log(`List "${props.list.title}" deletion failed:`, error)
     throw error
@@ -43,25 +45,34 @@ const confirmDelete = async () => {
 import { defineExpose } from 'vue'
 
 defineExpose({
-  open,
+  open: openDialog,
 })
 </script>
 
 <template>
   <div
     v-if="isOpen"
-    class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
+    class="fixed inset-0 z-[1000] flex items-center justify-center bg-gray-800 bg-opacity-75"
+    @click.self="closeDialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="delete-list-title"
   >
-    <div class="w-96 rounded-md bg-white p-6 shadow-lg">
-      <h3 class="mb-4 text-lg font-semibold">Delete List</h3>
-      <p>Are you sure you want to delete the list "{{ list.title }}"?</p>
-      <p v-if="deleteErrorMessage" class="mt-2 text-sm text-red-500">{{ deleteErrorMessage }}</p>
-      <div class="mt-4 flex justify-end">
-        <button class="mr-2 rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300" @click="close">
+    <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg" @click.stop>
+      <h3 id="delete-list-title" class="mb-4 text-xl font-bold text-black">Delete List</h3>
+      <p class="text-sm text-gray-700 mb-4">
+        Are you sure you want to delete the list "{{ list.title }}"? This action cannot be undone.
+      </p>
+      <p v-if="deleteErrorMessage" class="text-sm text-red-500 mb-4">{{ deleteErrorMessage }}</p>
+      <div class="flex justify-end">
+        <button
+          class="mr-2 rounded-md bg-gray-400 px-4 py-2 font-bold text-white hover:bg-gray-500"
+          @click="closeDialog"
+        >
           Cancel
         </button>
         <button
-          class="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+          class="rounded-md bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-600"
           @click="confirmDelete"
         >
           Confirm
@@ -70,3 +81,13 @@ defineExpose({
     </div>
   </div>
 </template>
+
+<style scoped>
+.border-orchid-500 {
+  border-color: #9d4edd;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+</style>
