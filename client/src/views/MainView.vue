@@ -76,13 +76,6 @@ onMounted(fetchBoards)
         class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
       >
         <BoardCard v-for="board in boards" :key="board.id" :board="board" class="h-full" />
-        <RouterLink
-          to="/create-board"
-          class="flex flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-gray-500 shadow-md transition-colors hover:bg-gray-200"
-        >
-          <span>Create new board</span>
-          <span class="mt-1 text-sm">1 remaining</span>
-        </RouterLink>
       </div>
       <div v-else class="text-center text-gray-500 dark:text-gray-400">No boards yet!</div>
     </main>
