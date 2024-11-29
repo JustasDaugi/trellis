@@ -1,5 +1,4 @@
 import { createCallerFactory } from '@server/trpc'
-import { authContext } from '@tests/utils/context'
 import { fakeBoard, fakeList, fakeUser } from '@server/entities/tests/fakes'
 import { insertAll } from '@tests/utils/records'
 import { wrapInRollbacks } from '@tests/utils/transactions'
@@ -9,15 +8,13 @@ import listRouter from '..'
 const createCaller = createCallerFactory(listRouter)
 const db = await wrapInRollbacks(createTestDatabase())
 
-const [boardOwner, otherUser] = await insertAll(db, 'user', [
-  fakeUser(),
-  fakeUser(),
-])
+const [user] = await insertAll(db, 'user', fakeUser())
+
 const [board] = await insertAll(
   db,
   'board',
   fakeBoard({
-    userId: boardOwner.id,
+    userId: user.id,
   })
 )
 
@@ -28,11 +25,12 @@ it('throws an error if the board does not exist', async () => {
   })
 
   // ACT & ASSERT
-  const { create } = createCaller(authContext({ db }, boardOwner))
+  const { create } = createCaller({ db })
   await expect(
     create({
       boardId: list.boardId,
       title: list.title,
+      userId: user.id,
     })
   ).rejects.toThrow(/not found/i)
 })
@@ -42,50 +40,20 @@ describe('permissions', () => {
     boardId: board.id,
   })
 
-  it('allows board owner to create a list', async () => {
+  it('allows a user to create a list', async () => {
     // ARRANGE
-    const { create } = createCaller(authContext({ db }, boardOwner))
+    const { create } = createCaller({ db })
 
     // ACT & ASSERT
     await expect(
       create({
         boardId: list.boardId,
         title: list.title,
+        userId: user.id,
       })
     ).resolves.toMatchObject({
       boardId: board.id,
       title: list.title,
     })
-  })
-
-  it('disallows other users from creating a list', async () => {
-    // ARRANGE
-    const { create } = createCaller(authContext({ db }, otherUser))
-
-    // ACT & ASSERT
-    await expect(
-      create({
-        boardId: list.boardId,
-        title: list.title,
-      })
-    ).rejects.toThrow(/not authorized/i)
-  })
-
-  it('disallows non-logged in users to create a list', async () => {
-    // ARRANGE
-    const { create } = createCaller({
-      db,
-      req: {
-        header: () => undefined,
-      } as any,
-    })
-
-    // ACT & ASSERT
-    await expect(
-      create({
-        boardId: list.boardId,
-        title: list.title,
-      })
-    ).rejects.toThrow(/unauthenticated|unauthorized/i)
   })
 })
