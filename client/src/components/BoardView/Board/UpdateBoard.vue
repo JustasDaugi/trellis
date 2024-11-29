@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'change-name', newName: string): void
+  (e: 'cancel'): void
 }>()
 
 const isDialogOpen = ref(false)
@@ -21,6 +22,7 @@ const openDialog = () => {
 
 const closeDialog = () => {
   isDialogOpen.value = false
+  emit('cancel')
 }
 
 const [updateBoard, updateErrorMessage] = useErrorMessage(async () => {
@@ -56,6 +58,7 @@ const changeName = async () => {
     <div
       v-if="isDialogOpen"
       class="fixed inset-0 z-[1000] flex items-center justify-center bg-gray-800 bg-opacity-75"
+      @click.self="closeDialog"
     >
       <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg">
         <h2 class="mb-4 text-xl font-bold">Change Name</h2>
