@@ -55,8 +55,8 @@ it('throws an error if the list does not exist', async () => {
 describe('permissions', () => {
   const card = fakeCard({
     listId: list.id,
-    title: 'Valid Card',
-    description: 'Description for valid card',
+    title: 'New card',
+    description: 'Description for new card',
   })
 
   it('allows a user to create a card', async () => {
@@ -75,6 +75,7 @@ describe('permissions', () => {
       listId: list.id,
       title: card.title,
       description: card.description,
+      userId: 1,
     })
   })
 })
