@@ -69,7 +69,7 @@ const changeName = async () => {
             id="list-name"
             v-model="listName"
             type="text"
-            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm"
+            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm text-black"
             required
             maxlength="500"
             placeholder="Enter new list name"
@@ -94,7 +94,6 @@ const changeName = async () => {
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .border-orchid-500 {
