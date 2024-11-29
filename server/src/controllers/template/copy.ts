@@ -7,20 +7,24 @@ import { type BoardPublic } from '@server/entities/board'
 export default authenticatedProcedure
   .use(provideRepos({ templateRepository }))
   .input(
-    boardTemplateSchema.pick({
-      id: true,
-      title: true,
-    })
+    boardTemplateSchema
+      .pick({
+        id: true,
+        title: true,
+        selectedBackground: true,
+      })
+      .partial({ selectedBackground: true })
   )
   .mutation(
     async ({ input, ctx: { authUser, repos } }): Promise<BoardPublic> => {
       const userId = authUser.id
-      const { id, title } = input
+      const { id, title, selectedBackground } = input
 
       const copiedBoard = await repos.templateRepository.copyBoard(
         id,
         userId,
-        title
+        title,
+        selectedBackground || undefined
       )
       if (!copiedBoard) {
         throw new Error('Failed to copy board template.')
