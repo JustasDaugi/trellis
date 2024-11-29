@@ -6,6 +6,7 @@ import type { BoardPublic } from '@server/shared/types'
 
 const emit = defineEmits<{
   (e: 'delete-board'): void
+  (e: 'cancel'): void
 }>()
 
 const props = defineProps<{
@@ -20,6 +21,7 @@ const open = () => {
 
 const close = () => {
   isOpen.value = false
+  emit('cancel') // Emit cancel when the dialog is closed
 }
 
 const [deleteBoard, deleteErrorMessage] = useErrorMessage(async () => {
@@ -50,18 +52,27 @@ defineExpose({
 <template>
   <div
     v-if="isOpen"
-    class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
+    class="fixed inset-0 z-[1000] flex items-center justify-center bg-gray-800 bg-opacity-75"
+    @click.self="close"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="delete-board-title"
   >
-    <div class="w-96 rounded-md bg-white p-6 shadow-lg">
-      <h3 class="mb-4 text-lg font-semibold">Delete Board</h3>
-      <p>Are you sure you want to delete the board "{{ board.title }}"?</p>
-      <p v-if="deleteErrorMessage" class="mt-2 text-sm text-red-500">{{ deleteErrorMessage }}</p>
-      <div class="mt-4 flex justify-end">
-        <button class="mr-2 rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300" @click="close">
+    <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg" @click.stop>
+      <h3 id="delete-board-title" class="mb-4 text-xl font-bold text-black">Delete Board</h3>
+      <p class="text-sm text-gray-700 mb-4">
+        Are you sure you want to delete the board "{{ board.title }}"? This action cannot be undone.
+      </p>
+      <p v-if="deleteErrorMessage" class="text-sm text-red-500 mb-4">{{ deleteErrorMessage }}</p>
+      <div class="flex justify-end">
+        <button
+          class="mr-2 rounded-md bg-gray-400 px-4 py-2 font-bold text-white hover:bg-gray-500"
+          @click="close"
+        >
           Cancel
         </button>
         <button
-          class="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+          class="rounded-md bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-600"
           @click="confirmDelete"
         >
           Confirm
@@ -70,3 +81,13 @@ defineExpose({
     </div>
   </div>
 </template>
+
+<style scoped>
+.border-orchid-500 {
+  border-color: #9d4edd;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+</style>
