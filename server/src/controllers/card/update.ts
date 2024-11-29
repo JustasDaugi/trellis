@@ -14,8 +14,9 @@ export default authenticatedProcedure
         id: true,
         title: true,
         listId: true,
+        description: true
       })
-      .partial({ listId: true, title: true })
+      .partial({ listId: true, title: true, description: true })
   )
   .mutation(
     async ({ input, ctx: { repos, authUser } }): Promise<CardPublic> => {
