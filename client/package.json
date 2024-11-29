@@ -26,7 +26,8 @@
     "pino": "^9.5.0",
     "superjson": "^2.2.1",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@mono/server": "^1.0.0",
