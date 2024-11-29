@@ -10,17 +10,19 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'change-name', newName: string): void
+  (e: 'cancel'): void
 }>()
 
-const isDialogOpen = ref(false)
+const isOpen = ref(false)
 const listName = ref(props.list.title)
 
 const openDialog = () => {
-  isDialogOpen.value = true
+  isOpen.value = true
 }
 
 const closeDialog = () => {
-  isDialogOpen.value = false
+  isOpen.value = false
+  emit('cancel')
 }
 
 const [updateList, updateErrorMessage] = useErrorMessage(async () => {
@@ -54,26 +56,35 @@ const changeName = async () => {
       Change name
     </button>
     <div
-      v-if="isDialogOpen"
+      v-if="isOpen"
       class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
     >
-      <div class="w-96 rounded-md bg-white p-6 shadow-lg">
-        <h3 class="mb-4 text-lg font-semibold text-black">Change Name</h3>
-        <input
-          v-model="listName"
-          type="text"
-          class="w-full rounded-md border px-4 py-2 text-black focus:outline-none focus:ring"
-        />
+      <div class="w-96 rounded-lg bg-white p-6 shadow-lg">
+        <h3 class="mb-4 text-xl font-bold text-black">Change Name</h3>
+        <div class="mb-4">
+          <label for="list-name" class="mb-2 block text-sm font-medium text-gray-700">
+            List Name
+          </label>
+          <input
+            id="list-name"
+            v-model="listName"
+            type="text"
+            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm"
+            required
+            maxlength="500"
+            placeholder="Enter new list name"
+          />
+        </div>
         <p v-if="updateErrorMessage" class="mt-2 text-sm text-red-500">{{ updateErrorMessage }}</p>
         <div class="mt-4 flex justify-end">
           <button
-            class="mr-2 rounded-md bg-gray-400 px-4 py-2 text-white text-opacity-90 hover:bg-gray-500"
+            class="mr-2 rounded-md bg-gray-400 px-4 py-2 font-bold text-white hover:bg-gray-500"
             @click="closeDialog"
           >
             Cancel
           </button>
           <button
-            class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            class="rounded-md bg-orchid-500 hover:bg-orchid-600 px-4 py-2 font-bold text-black"
             @click="changeName"
           >
             Confirm
@@ -83,3 +94,10 @@ const changeName = async () => {
     </div>
   </div>
 </template>
+
+
+<style scoped>
+.border-orchid-500 {
+  border-color: #9d4edd;
+}
+</style>
