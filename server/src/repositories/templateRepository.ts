@@ -60,16 +60,22 @@ export function templateRepository(db: Database) {
     async copyBoard(
       boardTemplateId: number,
       userId: number,
-      customTitle?: string
+      customTitle?: string,
+      selectedBackground?: string
     ) {
       return db
         .insertInto('board')
-        .columns(['title', 'userId'])
+        .columns(['title', 'userId', 'selectedBackground'])
         .expression(
           db
             .selectFrom('boardTemplate')
             .select([sql`${customTitle || 'title'}`.as('title')])
             .select(sql`${userId}`.as('userId'))
+            .select(
+              sql`${selectedBackground || 'defaultBackground'}`.as(
+                'selectedBackground'
+              )
+            )
             .where('id', '=', boardTemplateId)
         )
         .returning('id')
