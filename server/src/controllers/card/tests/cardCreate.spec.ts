@@ -62,20 +62,20 @@ describe('permissions', () => {
   it('allows a user to create a card', async () => {
     // ARRANGE
     const { create } = createCaller({ db })
-
+  
     // ACT & ASSERT
     await expect(
       create({
         listId: card.listId,
         title: card.title,
         description: card.description,
-        userId: 1,
+        userId: user.id,
       })
     ).resolves.toMatchObject({
       listId: list.id,
       title: card.title,
       description: card.description,
-      userId: 1,
     })
   })
+  
 })
