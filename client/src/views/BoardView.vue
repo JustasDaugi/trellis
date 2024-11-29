@@ -48,11 +48,8 @@ const fetchLists = async () => {
     await Promise.all(
       listsWithCards.map(async (list) => {
         try {
-          const fetchedCards = await trpc.card.find.mutate({ listId: list.id })
-          list.cards = fetchedCards.map((card: { description: unknown }) => ({
-            ...card,
-            description: card.description || '',
-          }))
+          const fetchedCards: CardPublic[] = await trpc.card.find.mutate({ listId: list.id })
+          list.cards = fetchedCards
         } catch (error) {
           console.error(`Error fetching cards for list ${list.id}:`, error)
         }
