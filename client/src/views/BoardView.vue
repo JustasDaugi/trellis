@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import draggable from 'vuedraggable'
 import { ref, onBeforeMount, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { trpc } from '@/trpc'
@@ -100,6 +101,26 @@ const handleCardDelete = async () => {
   await fetchLists()
   closeCardDialog()
 }
+
+const onCardDragEnd = async (evt: any, targetListId: number) => {
+  const { item } = evt
+  const card = item as CardPublic
+
+  if (card.listId !== targetListId) {
+    try {
+      const updatedCard = await trpc.card.update.mutate({
+        id: card.id,
+        listId: targetListId,
+      })
+
+      console.log(`Card updated successfully:`, updatedCard)
+
+      fetchLists()
+    } catch (error) {
+      console.error('Error updating card listId:', error)
+    }
+  }
+}
 </script>
 
 <template>
@@ -161,18 +182,27 @@ const handleCardDelete = async () => {
               @change-name="(newName) => (list.title = newName)"
               @delete-list="fetchLists"
             />
-            <div
-              v-for="card in list.cards"
-              :key="card.id"
-              class="mb-2 w-full cursor-pointer rounded bg-white p-2 text-black hover:bg-gray-100"
-              @click="openCardDialog(card)"
+            <draggable
+              v-model="list.cards"
+              group="cards"
+              :animation="200"
+              item-key="id"
+              @end="(evt) => onCardDragEnd(evt, list.id)"
             >
-              <h3 class="text-sm font-semibold">{{ card.title }}</h3>
-              <p class="text-xs">{{ card.description }}</p>
-            </div>
+              <template #item="{ element }">
+                <div
+                  class="mb-2 w-full cursor-pointer rounded bg-white p-2 text-black hover:bg-gray-100"
+                  @click="openCardDialog(element)"
+                >
+                  <h3 class="text-sm font-semibold">{{ element.title }}</h3>
+                  <p class="text-xs">{{ element.description }}</p>
+                </div>
+              </template>
+            </draggable>
             <AddCard :listId="list.id" @card-created="(card) => createCard(list.id, card)" />
           </div>
-            <AddListButton @list-created="renderList" />
+
+          <AddListButton @list-created="renderList" />
         </div>
       </main>
     </div>
