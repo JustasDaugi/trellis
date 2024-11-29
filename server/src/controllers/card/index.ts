@@ -8,5 +8,5 @@ export default router({
     create,
     deleteById,
     find,
-    update
+    update,
 })
