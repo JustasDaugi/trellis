@@ -9,11 +9,10 @@ const props = defineProps<{
   board: BoardPublic;
 }>();
 
-// Add 'toggle-dropdown' to defineEmits
 const emit = defineEmits<{
   (e: 'change-name', newName: string): void;
   (e: 'delete-list'): void;
-  (e: 'toggle-dropdown'): void; // Added this event
+  (e: 'toggle-dropdown'): void;
 }>();
 
 const isOpen = ref(false);
@@ -22,7 +21,7 @@ const deleteListRef = ref<InstanceType<typeof DeleteList> | null>(null);
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
-  emit('toggle-dropdown'); // This event is now part of defineEmits
+  emit('toggle-dropdown');
 };
 
 const closeDropdown = () => {
@@ -54,6 +53,10 @@ const changeName = (newName: string) => {
   closeDropdown();
 };
 
+const cancelChangeName = () => {
+  closeDropdown();
+};
+
 defineExpose({
   closeDropdown,
 });
@@ -82,7 +85,12 @@ defineExpose({
       v-if="isOpen"
       class="absolute right-0 z-10 mt-2 w-40 rounded-md border bg-white shadow-lg"
     >
-      <UpdateList :list="props.list" :closeDropdown="closeDropdown" @change-name="changeName" />
+      <UpdateList 
+        :list="props.list" 
+        :closeDropdown="closeDropdown" 
+        @change-name="changeName" 
+        @cancel="cancelChangeName" 
+      />
       <button
         @click="onDelete"
         class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
@@ -93,6 +101,7 @@ defineExpose({
         ref="deleteListRef"
         :list="props.list"
         @delete-list="emit('delete-list')"
+        @cancel="closeDropdown"
       />
     </div>
   </div>
