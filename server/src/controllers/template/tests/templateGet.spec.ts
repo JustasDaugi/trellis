@@ -2,13 +2,12 @@ import { fakeBoardTemplate, fakeUser } from '@server/entities/tests/fakes'
 import { createTestDatabase } from '@tests/utils/database'
 import { createCallerFactory } from '@server/trpc'
 import { wrapInRollbacks } from '@tests/utils/transactions'
-import { clearTables, insertAll } from '@tests/utils/records'
+import { insertAll } from '@tests/utils/records'
 import templateRouter from '..'
 
 const createCaller = createCallerFactory(templateRouter)
 const db = await wrapInRollbacks(createTestDatabase())
 
-await clearTables(db, ['boardTemplate'])
 const [user] = await insertAll(db, 'user', fakeUser())
 
 const { get } = createCaller({ db })
