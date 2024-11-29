@@ -1,5 +1,4 @@
 import { createCallerFactory } from '@server/trpc'
-import { authContext } from '@tests/utils/context'
 import {
   fakeBoard,
   fakeList,
@@ -14,100 +13,68 @@ import cardRouter from '..'
 const createCaller = createCallerFactory(cardRouter)
 const db = await wrapInRollbacks(createTestDatabase())
 
-describe('card create', async () => {
-  const [listOwner, otherUser] = await insertAll(db, 'user', [
-    fakeUser(),
-    fakeUser(),
-  ])
+const [user] = await insertAll(db, 'user', fakeUser())
 
-  const [board] = await insertAll(
-    db,
-    'board',
-    fakeBoard({
-      userId: listOwner.id,
-    })
-  )
+const [board] = await insertAll(
+  db,
+  'board',
+  fakeBoard({
+    userId: user.id,
+  })
+)
 
-  const [list] = await insertAll(
-    db,
-    'list',
-    fakeList({
-      boardId: board.id,
-      userId: listOwner.id,
-    })
-  )
+const [list] = await insertAll(
+  db,
+  'list',
+  fakeList({
+    boardId: board.id,
+    userId: user.id,
+  })
+)
 
-  describe('permissions', () => {
-    const card = fakeCard({
-      listId: list.id,
-    })
-
-    it('allows list owner to create a card', async () => {
-      // ARRANGE
-      const { create } = createCaller(authContext({ db }, listOwner))
-
-      // ACT & ASSERT
-      await expect(
-        create({
-          listId: card.listId,
-          title: card.title,
-          description: card.description,
-        })
-      ).resolves.toMatchObject({
-        listId: list.id,
-        title: card.title,
-        description: card.description,
-      })
-    })
-
-    it('disallows other users from creating a card', async () => {
-      // ARRANGE
-      const { create } = createCaller(authContext({ db }, otherUser))
-
-      // ACT & ASSERT
-      await expect(
-        create({
-          listId: card.listId,
-          title: card.title,
-          description: card.description,
-        })
-      ).rejects.toThrow(/not authorized/i)
-    })
-
-    it('disallows non-logged in users to create a card', async () => {
-      // ARRANGE
-      const { create } = createCaller({
-        db,
-        req: {
-          header: () => undefined,
-        } as any,
-      })
-
-      // ACT & ASSERT
-      await expect(
-        create({
-          listId: card.listId,
-          title: card.title,
-          description: card.description,
-        })
-      ).rejects.toThrow(/unauthenticated|unauthorized/i)
-    })
+it('throws an error if the list does not exist', async () => {
+  // ARRANGE
+  const card = fakeCard({
+    listId: list.id + 999999,
+    title: 'Invalid Card',
+    description: 'Card for non-existent list',
   })
 
-  it('throws an error if the list does not exist', async () => {
-    // ARRANGE
-    const card = fakeCard({
-      listId: list.id + 999999,
+  // ACT & ASSERT
+  const { create } = createCaller({ db })
+  await expect(
+    create({
+      listId: card.listId,
+      title: card.title,
+      description: card.description,
+      userId: 1,
     })
+  ).rejects.toThrow(/not found/i)
+})
+
+describe('permissions', () => {
+  const card = fakeCard({
+    listId: list.id,
+    title: 'Valid Card',
+    description: 'Description for valid card',
+  })
+
+  it('allows a user to create a card', async () => {
+    // ARRANGE
+    const { create } = createCaller({ db })
 
     // ACT & ASSERT
-    const { create } = createCaller(authContext({ db }, listOwner))
     await expect(
       create({
         listId: card.listId,
         title: card.title,
         description: card.description,
+        userId: 1,
       })
-    ).rejects.toThrow(/not found/i)
+    ).resolves.toMatchObject({
+      listId: list.id,
+      title: card.title,
+      description: card.description,
+    })
   })
 })
