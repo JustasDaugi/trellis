@@ -49,7 +49,10 @@ const fetchLists = async () => {
       listsWithCards.map(async (list) => {
         try {
           const fetchedCards = await trpc.card.find.mutate({ listId: list.id })
-          list.cards = fetchedCards
+          list.cards = fetchedCards.map((card: { description: string }) => ({
+            ...card,
+            description: card.description || '',
+          }))
         } catch (error) {
           console.error(`Error fetching cards for list ${list.id}:`, error)
         }
@@ -195,7 +198,7 @@ const onCardDragEnd = async (evt: any, targetListId: number) => {
                   @click="openCardDialog(element)"
                 >
                   <h3 class="text-sm font-semibold">{{ element.title }}</h3>
-                  <p class="text-xs">{{ element.description }}</p>
+                  <p v-if="element.description" class="text-xs">{{ element.description }}</p>
                 </div>
               </template>
             </draggable>
