@@ -3,6 +3,7 @@ import { ref, defineEmits } from 'vue'
 import { useRoute } from 'vue-router'
 import { trpc } from '@/trpc'
 import useErrorMessage from '@/composables/useErrorMessage'
+import { authUserId } from '@/stores/user'
 
 const emit = defineEmits(['list-created'])
 const route = useRoute()
@@ -14,10 +15,12 @@ const listForm = ref({
 const [createList, errorMessage] = useErrorMessage(async () => {
   try {
     const boardId = Number(route.params.id)
-    if (boardId && listForm.value.title) {
+    const userId = authUserId.value
+    if (boardId && userId && listForm.value.title) {
       const list = await trpc.list.create.mutate({
         title: listForm.value.title,
         boardId,
+        userId,
       })
       console.log('List created successfully:', list)
       emit('list-created', list)
@@ -44,8 +47,6 @@ const toggleAddList = () => {
     >
       + Add list
     </button>
-
-    <!-- Entry Field -->
     <div v-else class="w-full">
       <div class="flex w-52 items-center rounded-lg bg-black p-4">
         <input
