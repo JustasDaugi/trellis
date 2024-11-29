@@ -18,6 +18,7 @@ const emit = defineEmits<{
 const isDialogOpen = ref(true)
 const isDeleteMessageVisible = ref(false)
 const cardTitle = ref(props.card.title)
+const cardDescription = ref(props.card.description || '')
 
 const closeDialog = () => {
   isDialogOpen.value = false
@@ -28,6 +29,7 @@ const [updateCard, updateErrorMessage] = useErrorMessage(async () => {
     await trpc.card.update.mutate({
       id: props.card.id,
       title: cardTitle.value.trim(),
+      description: cardDescription.value.trim(),
     })
     emit('update-card')
     closeDialog()
@@ -71,6 +73,14 @@ const toggleDeleteMessage = () => {
                 type="text"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
               />
+            </label>
+            <label class="mb-4 block">
+              <span class="text-gray-700">Description</span>
+              <textarea
+                v-model="cardDescription"
+                rows="3"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+              ></textarea>
             </label>
             <p v-if="updateErrorMessage" class="mb-4 text-sm text-red-500">
               {{ updateErrorMessage }}
