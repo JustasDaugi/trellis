@@ -21,7 +21,7 @@ const open = () => {
 
 const close = () => {
   isOpen.value = false
-  emit('cancel') // Emit cancel when the dialog is closed
+  emit('cancel')
 }
 
 const [deleteBoard, deleteErrorMessage] = useErrorMessage(async () => {
