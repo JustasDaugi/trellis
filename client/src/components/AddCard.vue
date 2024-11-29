@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, defineEmits, defineProps, watch } from 'vue'
 import { trpc } from '@/trpc'
+import useErrorMessage from '@/composables/useErrorMessage'
+import { authUserId } from '@/stores/user'
 
 const props = defineProps<{
   listId: number
@@ -13,23 +15,18 @@ const cardForm = ref({
   listId: props.listId as number,
   description: '',
 })
-const errorMessage = ref('')
 
-watch(
-  () => props.listId,
-  (newListId) => {
-    cardForm.value.listId = newListId
-  }
-)
-
-const createCard = async () => {
+const [createCard, errorMessage] = useErrorMessage(async () => {
   try {
-    const { listId, title, description } = cardForm.value
-    if (listId && title.trim().length >= 1) {
+    const { title, description, listId } = cardForm.value
+    const userId = authUserId.value
+
+    if (listId && userId && title.trim().length >= 1) {
       const card = await trpc.card.create.mutate({
         title: title.trim(),
         listId,
         description: description.trim(),
+        userId,
       })
       console.log('Card created successfully:', card)
       emit('card-created', card)
@@ -37,21 +34,27 @@ const createCard = async () => {
       cardForm.value.description = ''
       isAddingCard.value = false
     } else {
-      console.error('List ID or card title is missing')
-      errorMessage.value = 'List ID or card title is missing'
+      console.error('List ID, card title, or user ID is missing')
+      throw new Error('List ID, card title, or user ID is missing')
     }
   } catch (error) {
     console.log('Card creation failed:', error)
-    errorMessage.value = 'Card creation failed'
+    throw error
   }
-}
+})
 
 const addCardToggle = () => {
   isAddingCard.value = !isAddingCard.value
   cardForm.value.title = ''
   cardForm.value.description = ''
-  errorMessage.value = ''
 }
+
+watch(
+  () => props.listId,
+  (newListId) => {
+    cardForm.value.listId = newListId
+  }
+)
 </script>
 
 <template>
