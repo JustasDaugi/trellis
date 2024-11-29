@@ -14,6 +14,28 @@ defineEmits(['logout'])
       <ul class="space-y-2">
         <li>
           <RouterLink
+            to="/"
+            class="flex items-center p-2 hover:bg-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="mr-3 h-5 w-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2 4 4 4-4 2 2m0 0v6h4V12m-8 8H7v-6"
+              />
+            </svg>
+            Home
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink
             to="/templates"
             class="flex items-center p-2 hover:bg-gray-700"
           >
