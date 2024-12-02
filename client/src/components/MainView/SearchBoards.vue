@@ -21,10 +21,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    class="flex items-center space-x-4 relative"
-    @click.stop
-  >
+  <div class="relative flex items-center space-x-4" @click.stop>
     <span class="text-sm text-gray-400">Quick find</span>
     <button @click.stop="toggleSearch" class="p-2 focus:outline-none">
       <svg
@@ -43,14 +40,14 @@ onUnmounted(() => {
       </svg>
     </button>
     <div
-      class="absolute top-0 left-16 h-10 transition-all duration-300 bg-gray-800 text-gray-300 border border-gray-600 rounded-lg shadow-md flex items-center"
+      class="absolute left-16 top-0 flex h-10 items-center rounded-lg border border-gray-600 bg-gray-800 text-gray-300 shadow-md transition-all duration-300"
       :class="{ 'w-64 px-4': isSearchOpen, 'w-0 px-0': !isSearchOpen }"
     >
       <input
         v-if="isSearchOpen"
         type="text"
         placeholder="Search boards"
-        class="w-full bg-transparent text-sm text-white outline-none focus:ring-2 focus:ring-orchid-500"
+        class="focus:ring-orchid-500 w-full bg-transparent text-sm text-white outline-none focus:ring-2"
       />
     </div>
   </div>
