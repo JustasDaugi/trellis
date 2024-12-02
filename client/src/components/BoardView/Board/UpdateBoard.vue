@@ -70,7 +70,7 @@ const changeName = async () => {
             id="board-name"
             v-model="boardName"
             type="text"
-            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm text-black"
+            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 text-black shadow-sm"
             required
             maxlength="500"
             placeholder="Enter new board name"
