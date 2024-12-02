@@ -170,9 +170,9 @@ const onCardDragEnd = async (evt: any, targetListId: number) => {
           <div
             v-for="list in lists"
             :key="list.id"
-            class="relative flex max-w-[20rem] flex-col rounded-lg bg-black bg-opacity-25 p-4 text-white shadow-md"
+            class="relative flex max-w-[20rem] flex-col rounded-lg bg-black p-4 text-base font-medium text-blue-400 shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <h2 class="mb-2 truncate text-lg font-semibold text-white hover:text-blue-300">
+            <h2 class="mb-2 truncate text-lg font-semibold text-blue-400 hover:text-blue-300">
               {{ list.title }}
             </h2>
             <ListDropdown
