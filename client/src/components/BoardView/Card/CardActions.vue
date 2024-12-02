@@ -65,13 +65,13 @@ const toggleDeleteMessage = () => {
         <div class="w-96 scale-95 transform rounded-md bg-white p-6 shadow-lg transition-transform">
           <h2 class="mb-4 text-xl font-bold text-gray-800">Manage Card</h2>
           <div class="mb-6">
-            <h4 class="text-lg mb-2 font-bold text-gray-700">Edit Card</h4>
+            <h4 class="mb-2 text-lg font-bold text-gray-700">Edit Card</h4>
             <label class="mb-4 block">
               <span class="mb-2 block text-sm font-medium text-gray-700">Title</span>
               <input
                 v-model="cardTitle"
                 type="text"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orchid-500 focus:ring focus:ring-orchid-200"
+                class="focus:border-orchid-500 focus:ring-orchid-200 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring"
               />
             </label>
             <label class="mb-4 block">
@@ -79,7 +79,7 @@ const toggleDeleteMessage = () => {
               <textarea
                 v-model="cardDescription"
                 rows="3"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orchid-500 focus:ring focus:ring-orchid-200"
+                class="focus:border-orchid-500 focus:ring-orchid-200 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring"
               ></textarea>
             </label>
             <p v-if="updateErrorMessage" class="mb-4 text-sm text-red-500">
