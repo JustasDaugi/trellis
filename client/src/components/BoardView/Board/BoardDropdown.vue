@@ -97,10 +97,7 @@ onBeforeUnmount(() => {
         @delete-board="emit('delete-board')"
         @cancel="cancelDelete"
       />
-      <ShareBoard
-        :boardId="props.board.id"
-        @cancel="cancelShare"
-      />
+      <ShareBoard :boardId="props.board.id" @cancel="cancelShare" />
     </div>
   </div>
 </template>
