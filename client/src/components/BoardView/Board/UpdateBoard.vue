@@ -53,7 +53,7 @@ const changeName = async () => {
       @click="openDialog"
       class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
     >
-      Change name
+      <span class="text-black">Change name</span>
     </button>
     <div
       v-if="isDialogOpen"
@@ -61,7 +61,7 @@ const changeName = async () => {
       @click.self="closeDialog"
     >
       <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg">
-        <h2 class="mb-4 text-xl font-bold">Change Name</h2>
+        <h2 class="mb-4 text-xl font-bold text-black">Change Name</h2>
         <div class="mb-4">
           <label for="board-name" class="mb-2 block text-sm font-medium text-gray-700">
             Board name
@@ -70,7 +70,7 @@ const changeName = async () => {
             id="board-name"
             v-model="boardName"
             type="text"
-            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm"
+            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm text-black"
             required
             maxlength="500"
             placeholder="Enter new board name"
@@ -85,7 +85,7 @@ const changeName = async () => {
             Cancel
           </button>
           <button
-            class="bg-orchid-500 hover:bg-orchid-600 rounded-md px-4 py-2 text-black font-bold"
+            class="bg-orchid-500 hover:bg-orchid-600 rounded-md px-4 py-2 font-bold text-black"
             @click="changeName"
           >
             Confirm
