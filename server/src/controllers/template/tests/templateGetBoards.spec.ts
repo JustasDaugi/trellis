@@ -18,7 +18,7 @@ it('should return an empty array if no templates exist', async () => {
   // No templates inserted.
 
   // ACT
-  const result = await getBoards({ offset: 0, limit: 10 });
+  const result = await getBoards();
 
   // ASSERT
   expect(result).toEqual([]);
@@ -32,7 +32,7 @@ it('should return templates with their correct properties', async () => {
   ]);
 
   // ACT
-  const result = await getBoards({ offset: 0, limit: 10 });
+  const result = await getBoards();
 
   // ASSERT
   expect(result).toHaveLength(2);
