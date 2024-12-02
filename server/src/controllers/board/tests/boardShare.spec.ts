@@ -1,35 +1,36 @@
-import { authContext } from '@tests/utils/context';
-import { fakeUser, fakeBoard } from '@server/entities/tests/fakes';
-import { createTestDatabase } from '@tests/utils/database';
-import { createCallerFactory } from '@server/trpc';
-import { wrapInRollbacks } from '@tests/utils/transactions';
-import { insertAll } from '@tests/utils/records';
-import { vi, type MockInstance } from 'vitest';
-import boardRouter from '..';
-import * as sendModule from '../utils/sendEmail';
+import { authContext } from '@tests/utils/context'
+import { fakeUser, fakeBoard } from '@server/entities/tests/fakes'
+import { createTestDatabase } from '@tests/utils/database'
+import { createCallerFactory } from '@server/trpc'
+import { wrapInRollbacks } from '@tests/utils/transactions'
+import { insertAll } from '@tests/utils/records'
+import { vi, type MockInstance } from 'vitest'
+import boardRouter from '..'
+import * as sendModule from '../utils/sendEmail'
 
-const createCaller = createCallerFactory(boardRouter);
-const db = await wrapInRollbacks(createTestDatabase());
+const createCaller = createCallerFactory(boardRouter)
+const db = await wrapInRollbacks(createTestDatabase())
 
 describe('board share', async () => {
-  const [user] = await insertAll(db, 'user', [fakeUser()]);
-  const [anotherUser] = await insertAll(db, 'user', [fakeUser()]);
-  const [board] = await insertAll(db, 'board', [fakeBoard({ userId: user.id })]);
+  const [user] = await insertAll(db, 'user', [fakeUser()])
+  const [anotherUser] = await insertAll(db, 'user', [fakeUser()])
+  const [board] = await insertAll(db, 'board', [fakeBoard({ userId: user.id })])
 
-  let sendEmailSpy: MockInstance;
+  let sendEmailSpy: MockInstance
 
   beforeEach(() => {
-    sendEmailSpy = vi.spyOn(sendModule, 'default').mockResolvedValue(undefined);
-  });
+    sendEmailSpy = vi.spyOn(sendModule, 'default').mockResolvedValue(undefined)
+  })
 
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
+    vi.restoreAllMocks()
+  })
 
   it('should throw an error if the board is not found', async () => {
     // ARRANGE
-    const { share } = createCaller(authContext({ db }, user));
-    const nonExistentBoardId = 1;
+    const { share } = createCaller(authContext({ db }, user))
+
+    const nonExistentBoardId = board.id + 1
 
     // ACT & ASSERT
     await expect(
@@ -37,13 +38,13 @@ describe('board share', async () => {
         boardId: nonExistentBoardId,
         email: anotherUser.email,
       })
-    ).rejects.toThrow(/Board not found/i);
-  });
+    ).rejects.toThrow(/Board not found/i)
+  })
 
   it('should throw an error if the user is not found', async () => {
     // ARRANGE
-    const { share } = createCaller(authContext({ db }, user));
-    const nonExistentEmail = 'nonexistent@example.com';
+    const { share } = createCaller(authContext({ db }, user))
+    const nonExistentEmail = 'nonexistent@example.com'
 
     // ACT & ASSERT
     await expect(
@@ -51,29 +52,32 @@ describe('board share', async () => {
         boardId: board.id,
         email: nonExistentEmail,
       })
-    ).rejects.toThrow(/User not found/i);
-  });
+    ).rejects.toThrow(/User not found/i)
+  })
 
   it('should send an email successfully', async () => {
     // ARRANGE
-    const { share } = createCaller(authContext({ db }, user));
+    const { share } = createCaller(authContext({ db }, user))
 
     // ACT
     const result = await share({
       boardId: board.id,
       email: anotherUser.email,
-    });
+    })
 
     // ASSERT
-    expect(result).toEqual({ success: true });
-    expect(sendEmailSpy).toHaveBeenCalledWith(anotherUser.email, expect.any(String));
-  });
+    expect(result).toEqual({ success: true })
+    expect(sendEmailSpy).toHaveBeenCalledWith(
+      anotherUser.email,
+      expect.any(String)
+    )
+  })
 
   it('should handle email sending errors', async () => {
     // ARRANGE
-    const { share } = createCaller(authContext({ db }, user));
+    const { share } = createCaller(authContext({ db }, user))
 
-    sendEmailSpy.mockRejectedValueOnce(new Error('Email service error'));
+    sendEmailSpy.mockRejectedValueOnce(new Error('Email service error'))
 
     // ACT & ASSERT
     await expect(
@@ -81,6 +85,6 @@ describe('board share', async () => {
         boardId: board.id,
         email: anotherUser.email,
       })
-    ).rejects.toThrow(/Failed to send email/i);
-  });
-});
+    ).rejects.toThrow(/Failed to send email/i)
+  })
+})
