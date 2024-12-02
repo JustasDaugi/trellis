@@ -69,7 +69,7 @@ const changeName = async () => {
             id="list-name"
             v-model="listName"
             type="text"
-            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 shadow-sm text-black"
+            class="focus:border-orchid-500 focus:ring-orchid-500 block w-full rounded-md border-gray-300 text-black shadow-sm"
             required
             maxlength="500"
             placeholder="Enter new list name"
@@ -84,7 +84,7 @@ const changeName = async () => {
             Cancel
           </button>
           <button
-            class="rounded-md bg-orchid-500 hover:bg-orchid-600 px-4 py-2 font-bold text-black"
+            class="bg-orchid-500 hover:bg-orchid-600 rounded-md px-4 py-2 font-bold text-black"
             @click="changeName"
           >
             Confirm
