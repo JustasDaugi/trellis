@@ -9,5 +9,5 @@ defineEmits<{
 </script>
 
 <template>
-    <AddList @list-created="$emit('list-created', $event)" />
+  <AddList @list-created="$emit('list-created', $event)" />
 </template>
