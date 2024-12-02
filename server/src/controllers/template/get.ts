@@ -9,7 +9,7 @@ export default publicProcedure
   .use(
     provideRepos({
       templateRepository,
-      boardRepository
+      boardRepository,
     })
   )
   .input(idSchema)
@@ -20,10 +20,11 @@ export default publicProcedure
       throw new NotFoundError('Board not found')
     }
 
-    const selectedBackground = await repos.boardRepository.findSelectedBackground(boardId)
+    const selectedBackground =
+      await repos.boardRepository.findSelectedBackground(boardId)
 
     return {
       ...board,
-        selectedBackground: selectedBackground?.selectedBackground ?? null,
+      selectedBackground: selectedBackground?.selectedBackground ?? null,
     }
   })
