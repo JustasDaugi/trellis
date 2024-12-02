@@ -60,10 +60,10 @@ defineExpose({
   >
     <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg" @click.stop>
       <h3 id="delete-list-title" class="mb-4 text-xl font-bold text-black">Delete List</h3>
-      <p class="text-sm text-gray-700 mb-4">
+      <p class="mb-4 text-sm text-gray-700">
         Are you sure you want to delete the list "{{ list.title }}"? This action cannot be undone.
       </p>
-      <p v-if="deleteErrorMessage" class="text-sm text-red-500 mb-4">{{ deleteErrorMessage }}</p>
+      <p v-if="deleteErrorMessage" class="mb-4 text-sm text-red-500">{{ deleteErrorMessage }}</p>
       <div class="flex justify-end">
         <button
           class="mr-2 rounded-md bg-gray-400 px-4 py-2 font-bold text-white hover:bg-gray-500"
