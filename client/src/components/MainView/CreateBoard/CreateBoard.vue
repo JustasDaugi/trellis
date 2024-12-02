@@ -116,4 +116,3 @@ function selectBackground(background: string) {
   cursor: pointer;
 }
 </style>
-
