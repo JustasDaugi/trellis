@@ -67,7 +67,7 @@ const share = async () => {
       <div class="relative z-[1001] w-96 rounded-lg bg-white p-6 shadow-lg">
         <CloseButton @close="closeDialog" />
 
-        <h2 class="mb-4 text-xl font-bold">Share via Gmail</h2>
+        <h2 class="mb-4 text-xl font-bold text-black">Share via Gmail</h2>
         <div class="mb-4">
           <label for="email-address" class="mb-2 block text-sm font-medium text-gray-700">
             Email address
@@ -84,7 +84,7 @@ const share = async () => {
         <p v-if="shareErrorMessage" class="mt-2 text-sm text-red-500">{{ shareErrorMessage }}</p>
         <p
           v-if="successMessage"
-          class="mt-2 text-sm text-green-600 border border-green-500 rounded p-2"
+          class="mt-2 rounded border border-green-500 p-2 text-sm text-green-600"
         >
           {{ successMessage }}
         </p>
@@ -96,7 +96,7 @@ const share = async () => {
             Cancel
           </button>
           <button
-            class="bg-orchid-500 hover:bg-orchid-600 rounded-md px-4 py-2 text-black font-bold"
+            class="bg-orchid-500 hover:bg-orchid-600 rounded-md px-4 py-2 font-bold text-black"
             @click="share"
           >
             Share
