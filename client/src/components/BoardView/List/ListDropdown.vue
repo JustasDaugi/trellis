@@ -1,65 +1,65 @@
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits, onMounted, onBeforeUnmount, defineExpose } from 'vue';
-import type { BoardPublic, ListPublic } from '@server/shared/types';
-import UpdateList from './UpdateList.vue';
-import DeleteList from './DeleteList.vue';
+import { ref, defineProps, defineEmits, onMounted, onBeforeUnmount, defineExpose } from 'vue'
+import type { BoardPublic, ListPublic } from '@server/shared/types'
+import UpdateList from './UpdateList.vue'
+import DeleteList from './DeleteList.vue'
 
 const props = defineProps<{
-  list: ListPublic;
-  board: BoardPublic;
-}>();
+  list: ListPublic
+  board: BoardPublic
+}>()
 
 const emit = defineEmits<{
-  (e: 'change-name', newName: string): void;
-  (e: 'delete-list'): void;
-  (e: 'toggle-dropdown'): void;
-}>();
+  (e: 'change-name', newName: string): void
+  (e: 'delete-list'): void
+  (e: 'toggle-dropdown'): void
+}>()
 
-const isOpen = ref(false);
-const dropdownRef = ref<HTMLElement | null>(null);
-const deleteListRef = ref<InstanceType<typeof DeleteList> | null>(null);
+const isOpen = ref(false)
+const dropdownRef = ref<HTMLElement | null>(null)
+const deleteListRef = ref<InstanceType<typeof DeleteList> | null>(null)
 
 const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-  emit('toggle-dropdown');
-};
+  isOpen.value = !isOpen.value
+  emit('toggle-dropdown')
+}
 
 const closeDropdown = () => {
-  isOpen.value = false;
-};
+  isOpen.value = false
+}
 
 const handleClickOutside = (event: MouseEvent) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
-    closeDropdown();
+    closeDropdown()
   }
-};
+}
 
 onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutside);
-});
+  document.addEventListener('mousedown', handleClickOutside)
+})
 
 onBeforeUnmount(() => {
-  document.removeEventListener('mousedown', handleClickOutside);
-});
+  document.removeEventListener('mousedown', handleClickOutside)
+})
 
 const onDelete = () => {
   if (deleteListRef.value) {
-    deleteListRef.value.open();
+    deleteListRef.value.open()
   }
-};
+}
 
 const changeName = (newName: string) => {
-  emit('change-name', newName);
-  closeDropdown();
-};
+  emit('change-name', newName)
+  closeDropdown()
+}
 
 const cancelChangeName = () => {
-  closeDropdown();
-};
+  closeDropdown()
+}
 
 defineExpose({
   closeDropdown,
-});
+})
 </script>
 
 <template>
@@ -80,16 +80,13 @@ defineExpose({
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v.01M12 12v.01M12 18v.01" />
       </svg>
     </button>
-    
-    <div
-      v-if="isOpen"
-      class="absolute right-0 z-10 mt-2 w-40 rounded-md border bg-white shadow-lg"
-    >
-      <UpdateList 
-        :list="props.list" 
-        :closeDropdown="closeDropdown" 
-        @change-name="changeName" 
-        @cancel="cancelChangeName" 
+
+    <div v-if="isOpen" class="absolute right-0 z-10 mt-2 w-40 rounded-md border bg-white shadow-lg">
+      <UpdateList
+        :list="props.list"
+        :closeDropdown="closeDropdown"
+        @change-name="changeName"
+        @cancel="cancelChangeName"
       />
       <button
         @click="onDelete"
