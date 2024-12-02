@@ -65,7 +65,7 @@ function handleSelect(background: string) {
           />
         </svg>
       </div>
-      
+
       <div class="relative">
         <img
           src="@/assets/background-3.jpg"
