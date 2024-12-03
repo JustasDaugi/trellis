@@ -4,7 +4,7 @@ import nodemailer, {
   type SentMessageInfo,
   type SendMailOptions,
 } from 'nodemailer'
-import sendEmail from '../../../../service/sendEmail'
+import sendEmail from '../sendEmail'
 
 describe('sendEmail', () => {
   let sendMailMock: Mock<[SendMailOptions], Promise<SentMessageInfo>>
