@@ -5,8 +5,9 @@ import { createCallerFactory } from '@server/trpc'
 import { wrapInRollbacks } from '@tests/utils/transactions'
 import { insertAll } from '@tests/utils/records'
 import { vi, type MockInstance } from 'vitest'
+import * as sendModule from '../../../service/sendEmail'
 import boardRouter from '..'
-import * as sendModule from '../utils/sendEmail'
+
 
 const createCaller = createCallerFactory(boardRouter)
 const db = await wrapInRollbacks(createTestDatabase())
