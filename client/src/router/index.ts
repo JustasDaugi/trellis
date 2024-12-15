@@ -51,7 +51,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (isLoggedIn.value) {
     if (to.name === 'Login' || to.name === 'Signup' || to.name === 'Home') {
-      next({ name: 'MainView' })
+      if (to.query.redirect) {
+        next(to.query.redirect as string)
+      } else {
+        next({ name: 'MainView' })
+      }
     } else {
       next()
     }
@@ -63,7 +67,7 @@ router.beforeEach((to, from, next) => {
       to.name === 'TemplateView' ||
       to.name === 'TemplateBoard'
     ) {
-      next({ name: 'Home' })
+      next({ name: 'Login', query: { redirect: to.fullPath } })
     } else {
       next()
     }
