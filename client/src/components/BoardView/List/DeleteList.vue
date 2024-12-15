@@ -29,11 +29,10 @@ const [deleteList, deleteErrorMessage] = useErrorMessage(async () => {
     await trpc.list.deleteById.mutate({
       id: props.list.id,
     })
-    console.log(`List "${props.list.title}" deleted successfully.`)
     emit('delete-list')
     closeDialog()
   } catch (error) {
-    console.log(`List "${props.list.title}" deletion failed:`, error)
+    console.log(error)
     throw error
   }
 })
