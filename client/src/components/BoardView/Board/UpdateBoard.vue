@@ -28,11 +28,11 @@ const closeDialog = () => {
 const [updateBoard, updateErrorMessage] = useErrorMessage(async () => {
   try {
     if (boardName.value.trim()) {
-      const updatedBoard = await trpc.board.update.mutate({
+      await trpc.board.update.mutate({
         id: props.board.id,
         title: boardName.value.trim(),
       })
-      console.log('Board updated successfully:', updatedBoard)
+      console.log('Board updated successfully')
       emit('change-name', boardName.value.trim())
       closeDialog()
     }
