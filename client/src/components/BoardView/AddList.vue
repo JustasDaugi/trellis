@@ -22,7 +22,7 @@ const [createList, errorMessage] = useErrorMessage(async () => {
         boardId,
         userId,
       })
-      console.log('List created successfully:', list)
+      console.log('List created successfully')
       emit('list-created', list)
       listForm.value.title = ''
       addListRef.value = false
