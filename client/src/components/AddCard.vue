@@ -28,7 +28,7 @@ const [createCard, errorMessage] = useErrorMessage(async () => {
         description: description.trim(),
         userId,
       })
-      console.log('Card created successfully:', card)
+      console.log('Card created successfully')
       emit('card-created', card)
       cardForm.value.title = ''
       cardForm.value.description = ''
