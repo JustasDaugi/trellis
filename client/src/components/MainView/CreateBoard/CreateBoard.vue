@@ -18,7 +18,6 @@ const boardForm = ref({
 const [createBoard, errorMessage] = useErrorMessage(async () => {
   try {
     const board = await trpc.board.create.mutate(boardForm.value)
-    console.log('Board created successfully:', board)
     router.push({
       name: 'Board',
       params: { id: board.id },
@@ -39,7 +38,6 @@ function closeDialog() {
 
 function selectBackground(background: string) {
   boardForm.value.selectedBackground = background
-  console.log('Selected Background:', background)
 }
 </script>
 
