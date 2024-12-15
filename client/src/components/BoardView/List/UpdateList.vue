@@ -28,11 +28,10 @@ const closeDialog = () => {
 const [updateList, updateErrorMessage] = useErrorMessage(async () => {
   try {
     if (listName.value.trim()) {
-      const updatedList = await trpc.list.update.mutate({
+      await trpc.list.update.mutate({
         id: props.list.id,
         title: listName.value.trim(),
       })
-      console.log('List updated successfully:', updatedList)
       emit('change-name', listName.value.trim())
       closeDialog()
     }
